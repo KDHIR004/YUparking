@@ -4,7 +4,9 @@ import yuparking.models.*;
 import yuparking.factory.UserFactory;
 import yuparking.services.LoginService;
 import yuparking.services.SignupService;
+import yuparking.services.BookingService;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class App {
@@ -13,6 +15,8 @@ public class App {
         SignupService signupService = new SignupService();
         Scanner sc = new Scanner(System.in);
 
+        // Load users for booking service later
+        List<User> users = loginService.getAllUsers();
         User loggedInUser = null;
 
         while (true) {
@@ -38,6 +42,9 @@ public class App {
                             System.out.println("Your email is not verified. Simulating verification now...");
                             loggedInUser.clickVerificationLink();
                         }
+
+                        // After successful login, open booking menu
+                        showBookingMenu(loggedInUser, users);
                     }
                     break;
 
@@ -46,8 +53,16 @@ public class App {
                     String email = sc.nextLine();
                     System.out.print("Enter password: ");
                     String password = sc.nextLine();
-                    System.out.print("Enter user type (student, faculty, staff, visitor): ");
-                    String userType = sc.nextLine();
+                    String userType = "vistor";
+                    boolean success = false;
+                    while (!success) {
+                        System.out.print("Enter user type (faculty, staff, student, visitor): ");
+                        userType = sc.nextLine();
+                        success = signupService.signup(email, password, userType);
+                        if (!success) {
+                            System.out.println("Please enter a valid user type and try again.");
+                        }
+                    }
 
                     signupService.signup(email, password, userType);
                     // Simulate verification immediately after signup:
@@ -55,6 +70,8 @@ public class App {
                     int newUserId = signupService.getNextUserId() - 1;  // Id created
                     User newUser = UserFactory.createUser(newUserId, email, password, userType);
                     newUser.clickVerificationLink();
+                    users.add(newUser); // Add newly created user to the list
+                    break;
 
                 case 3:
                     System.out.println("Exiting YuParking System. Goodbye!");
@@ -62,6 +79,66 @@ public class App {
 
                 default:
                     System.out.println("Invalid option. Try again.");
+            }
+        }
+    }
+
+    // Booking menu shown after login
+    private static void showBookingMenu(User loggedInUser, List<User> users) {
+        BookingService bookingService = new BookingService(users);
+        Scanner sc = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("\n--- Booking Menu ---");
+            System.out.println("1. Create Booking");
+            System.out.println("2. Modify Booking");
+            System.out.println("3. Cancel Booking");
+            System.out.println("4. View All Bookings");
+            System.out.println("5. Log out of booking menu");
+            System.out.print("Choose option: ");
+            int choice = sc.nextInt();
+            sc.nextLine(); // consume newline
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter SpaceID: ");
+                    int spaceID = sc.nextInt();
+                    sc.nextLine();
+                    System.out.print("Enter Start Time (yyyy-MM-ddTHH:mm): ");
+                    String startTime = sc.nextLine();
+                    System.out.print("Enter End Time (yyyy-MM-ddTHH:mm): ");
+                    String endTime = sc.nextLine();
+                    bookingService.createBooking(loggedInUser, spaceID, startTime, endTime);
+                    break;
+
+                case 2:
+                    System.out.print("Enter Booking ID to modify: ");
+                    int bookingIdToModify = sc.nextInt();
+                    sc.nextLine();
+                    System.out.print("New Start Time (yyyy-MM-ddTHH:mm): ");
+                    String newStartTime = sc.nextLine();
+                    System.out.print("New End Time (yyyy-MM-ddTHH:mm): ");
+                    String newEndTime = sc.nextLine();
+                    bookingService.modifyBooking(bookingIdToModify, newStartTime, newEndTime);
+                    break;
+
+                case 3:
+                    System.out.print("Enter Booking ID to cancel: ");
+                    int bookingIdToCancel = sc.nextInt();
+                    sc.nextLine();
+                    bookingService.cancelBooking(bookingIdToCancel);
+                    break;
+
+                case 4:
+                    bookingService.showAllBookings();
+                    break;
+
+                case 5:
+                    System.out.println("Logging out of booking menu...");
+                    return;
+
+                default:
+                    System.out.println("Invalid choice. Try again.");
             }
         }
     }

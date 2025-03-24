@@ -1,11 +1,15 @@
 package yuparking.services;
 
 import yuparking.database.Database;
+
+import java.util.Arrays;
 import java.util.List;
 
 public class SignupService {
     private Database db;
     private int nextUserId;
+    private final List<String> allowedUserTypes = Arrays.asList("faculty", "staff", "student", "visitor");
+
 
     public SignupService() {
         db = new Database();
@@ -21,7 +25,11 @@ public class SignupService {
         return nextUserId;
     }
 
-    public void signup(String email, String password, String userType) {
+    public boolean signup(String email, String password, String userType) {
+        if (!allowedUserTypes.contains(userType.toLowerCase())) {
+            System.out.println("Invalid user type: " + userType + ". Allowed types are: faculty, staff, student, visitor.");
+            return false;
+        }
         List<String[]> users = db.retrieveData("users");
         String[] newUser = new String[]{
                 String.valueOf(nextUserId),
@@ -36,5 +44,6 @@ public class SignupService {
 
         //After signup
         nextUserId++;
+        return true;
     }
 }
