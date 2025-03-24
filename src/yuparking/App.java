@@ -2,41 +2,67 @@ package yuparking;
 
 import yuparking.models.*;
 import yuparking.factory.UserFactory;
+import yuparking.services.LoginService;
+import yuparking.services.SignupService;
+
+import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) {
-        // Simulate registering different types of users
-        User facultyUser = UserFactory.createUser(1, "faculty@yorku.ca", "facpass", "faculty");
-        User staffUser = UserFactory.createUser(2, "staff@yorku.ca", "staffpass", "staff");
-        User studentUser = UserFactory.createUser(3, "student@my.yorku.ca", "studentpass", "student");
-        User visitorUser = UserFactory.createUser(4, "visitor@yorku.ca", "visitorpass", "visitor");
+        LoginService loginService = new LoginService();
+        SignupService signupService = new SignupService();
+        Scanner sc = new Scanner(System.in);
 
-        // Simulate system actions — showing user details
-        System.out.println("Registered Users:");
-        printUserDetails(facultyUser);
-        printUserDetails(staffUser);
-        printUserDetails(studentUser);
-        printUserDetails(visitorUser);
-        
-        // Simulate login attempt (by email)
-        loginUser("student@my.yorku.ca", "studentpass", new User[]{facultyUser, staffUser, studentUser, visitorUser});
-    }
+        User loggedInUser = null;
 
-    private static void printUserDetails(User user) {
-        System.out.println("----------------------------");
-        System.out.println("User ID: " + user.getUserID());
-        System.out.println("Email: " + user.getEmail());
-        System.out.println("User Type: " + user.getUserType());
-    }
+        while (true) {
+            System.out.println("\n--- Welcome to YuParking System ---");
+            System.out.println("1. Login");
+            System.out.println("2. Sign Up");
+            System.out.println("3. Exit");
+            System.out.print("Choose option: ");
+            int choice = sc.nextInt();
+            sc.nextLine();  // consume newline
 
-    private static void loginUser(String email, String password, User[] users) {
-        System.out.println("\nAttempting login for: " + email);
-        for (User user : users) {
-            if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
-                System.out.println("Login successful for user type: " + user.getUserType());
-                return;
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter email: ");
+                    String loginEmail = sc.nextLine();
+                    System.out.print("Enter password: ");
+                    String loginPassword = sc.nextLine();
+                    loggedInUser = loginService.login(loginEmail, loginPassword);
+                    if (loggedInUser != null) {
+                        System.out.println("Welcome " + loggedInUser.getEmail() + " (" + loggedInUser.getUserType() + ")");
+                        // Simulate verification click if user not verified (in object form)
+                        if (!loggedInUser.isVerified()) {
+                            System.out.println("Your email is not verified. Simulating verification now...");
+                            loggedInUser.clickVerificationLink();
+                        }
+                    }
+                    break;
+
+                case 2:
+                    System.out.print("Enter email: ");
+                    String email = sc.nextLine();
+                    System.out.print("Enter password: ");
+                    String password = sc.nextLine();
+                    System.out.print("Enter user type (student, faculty, staff, visitor): ");
+                    String userType = sc.nextLine();
+
+                    signupService.signup(email, password, userType);
+                    // Simulate verification immediately after signup:
+                    System.out.println("Simulating clicking verification link for this new user...");
+                    int newUserId = signupService.getNextUserId() - 1;  // Id created
+                    User newUser = UserFactory.createUser(newUserId, email, password, userType);
+                    newUser.clickVerificationLink();
+
+                case 3:
+                    System.out.println("Exiting YuParking System. Goodbye!");
+                    return;
+
+                default:
+                    System.out.println("Invalid option. Try again.");
             }
         }
-        System.out.println("Login failed: User not found or password incorrect.");
     }
 }

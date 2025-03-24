@@ -4,6 +4,7 @@ public abstract class User {
     protected int userID;
     protected String email;
     protected String password;
+    protected boolean verified = false;
 
     public User(int userID, String email, String password) {
         this.userID = userID;
@@ -23,5 +24,13 @@ public abstract class User {
 
     public String getPassword() {
         return password;
+    }
+    public void clickVerificationLink() {
+        this.verified = true;
+        System.out.println(email + " has verified their email.");
+    }
+
+    public boolean isVerified() {
+        return verified;
     }
 }

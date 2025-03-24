@@ -1,0 +1,6 @@
+id,email,password,usertype,verified
+1,faculty1@yorku.ca,facpass1,faculty,true
+2,staff1@yorku.ca,staffpass1,staff,true
+3,student1@my.yorku.ca,studpass1,student,false
+4,visitor1@gmail.ca,visitpass1,visitor,false
+5,student2@my.yorku.ca,Stu123,facuty,false
