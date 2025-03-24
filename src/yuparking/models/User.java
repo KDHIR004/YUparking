@@ -13,7 +13,15 @@ public abstract class User {
 
     public abstract String getUserType();
 
+    public int getUserID() {
+        return userID;
+    }
+
     public String getEmail() {
         return email;
+    }
+
+    public String getPassword() {
+        return password;
     }
 }
