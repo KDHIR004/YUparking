@@ -1,8 +1,8 @@
-package yuparking.gui;
+package yuparking.gui.Login;
 
-import yuparking.gui.Booking.CancelBookingGUI;
-import yuparking.gui.Booking.CreateBookingGUI;
-import yuparking.gui.Booking.ModifyBookingGUI;
+import yuparking.gui.UserBooking.CancelBookingGUI;
+import yuparking.gui.UserBooking.CreateBookingGUI;
+import yuparking.gui.UserBooking.ModifyBookingGUI;
 import yuparking.models.User;
 import yuparking.services.UserBookingService;
 
@@ -50,7 +50,7 @@ public class BookingMenuGUI {
         createBookingButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new CreateBookingGUI(loggedInUser, userBookingService);
+                new CreateBookingGUI(loggedInUser);
                 frame.dispose();
             }
         });
@@ -58,7 +58,7 @@ public class BookingMenuGUI {
         modifyBookingButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new ModifyBookingGUI(loggedInUser, userBookingService);
+                new ModifyBookingGUI(loggedInUser);
                 frame.dispose();
             }
         });
@@ -66,7 +66,7 @@ public class BookingMenuGUI {
         cancelBookingButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new CancelBookingGUI(loggedInUser, userBookingService);
+                new CancelBookingGUI(loggedInUser);
                 frame.dispose();
             }
         });
