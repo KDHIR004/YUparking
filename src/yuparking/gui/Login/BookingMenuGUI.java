@@ -1,91 +1,79 @@
 package yuparking.gui.Login;
 
-import yuparking.gui.UserBooking.CancelBookingGUI;
-import yuparking.gui.UserBooking.CreateBookingGUI;
-import yuparking.gui.UserBooking.ModifyBookingGUI;
 import yuparking.models.User;
-import yuparking.services.UserBookingService;
+import yuparking.gui.UserBooking.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class BookingMenuGUI {
     private JFrame frame;
     private JPanel panel;
-    private JButton createBookingButton, modifyBookingButton, cancelBookingButton, viewBookingsButton, logoutButton;
-    private User loggedInUser;
-    private UserBookingService userBookingService;
+    private User currentUser;
 
     public BookingMenuGUI(User user) {
-        this.loggedInUser = user;
-        this.userBookingService = new UserBookingService();
+        this.currentUser = user;
         initializeUI();
     }
 
     private void initializeUI() {
         frame = new JFrame("Booking Menu");
-        frame.setSize(400, 300);
+        frame.setSize(400, 500);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLocationRelativeTo(null);
 
         panel = new JPanel();
-        panel.setLayout(new GridLayout(5, 1));
+        panel.setLayout(new GridLayout(7, 1, 5, 5));
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        createBookingButton = new JButton("Create Booking");
-        modifyBookingButton = new JButton("Modify Booking");
-        cancelBookingButton = new JButton("Cancel Booking");
-        viewBookingsButton = new JButton("View Bookings");
-        logoutButton = new JButton("Logout");
+        // Create buttons
+        JButton createButton = new JButton("Create Booking");
+        JButton modifyButton = new JButton("Modify Booking");
+        JButton cancelButton = new JButton("Cancel Booking");
+        JButton historyButton = new JButton("View Booking History");
+        JButton paymentButton = new JButton("Make Payment");
+        JButton logoutButton = new JButton("Logout");
 
-        panel.add(createBookingButton);
-        panel.add(modifyBookingButton);
-        panel.add(cancelBookingButton);
-        panel.add(viewBookingsButton);
+        // Add action listeners
+        createButton.addActionListener(e -> {
+            frame.dispose();
+            new CreateBookingGUI(currentUser);
+        });
+
+        modifyButton.addActionListener(e -> {
+            frame.dispose();
+            new ModifyBookingGUI(currentUser);
+        });
+
+        cancelButton.addActionListener(e -> {
+            frame.dispose();
+            new CancelBookingGUI(currentUser);
+        });
+
+        historyButton.addActionListener(e -> {
+            frame.dispose();
+            new BookingHistoryGUI(currentUser);
+        });
+
+        paymentButton.addActionListener(e -> {
+            frame.dispose();
+            new PaymentGUI(currentUser);
+        });
+
+        logoutButton.addActionListener(e -> {
+            frame.dispose();
+            new LoginGUI();
+        });
+
+        // Add buttons to panel
+        panel.add(createButton);
+        panel.add(modifyButton);
+        panel.add(cancelButton);
+        panel.add(historyButton);
+        panel.add(paymentButton);
         panel.add(logoutButton);
 
         frame.add(panel);
-
-        createBookingButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new CreateBookingGUI(loggedInUser);
-                frame.dispose();
-            }
-        });
-
-        modifyBookingButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new ModifyBookingGUI(loggedInUser);
-                frame.dispose();
-            }
-        });
-
-        cancelBookingButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new CancelBookingGUI(loggedInUser);
-                frame.dispose();
-            }
-        });
-
-        viewBookingsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                userBookingService.showUserBookings(loggedInUser);
-            }
-        });
-
-        logoutButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "Logging out...");
-                frame.dispose();
-            }
-        });
-
         frame.setVisible(true);
     }
 }

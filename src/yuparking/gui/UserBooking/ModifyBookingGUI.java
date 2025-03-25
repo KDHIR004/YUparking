@@ -149,9 +149,14 @@ public class ModifyBookingGUI {
             // Modify the booking
             userBookingService.modifyUserBooking(currentUser, bookingId, combinedStartDateTime, combinedEndDateTime);
 
+            // Show confirmation dialog
             JOptionPane.showMessageDialog(frame,
-                "Booking modified successfully!",
-                "Success",
+                String.format("Booking modified successfully!\n" +
+                    "Booking ID: %d\n" +
+                    "New Start Time: %s\n" +
+                    "New End Time: %s",
+                    bookingId, formattedStartTime, formattedEndTime),
+                "Modification Confirmation",
                 JOptionPane.INFORMATION_MESSAGE);
 
             frame.dispose();
