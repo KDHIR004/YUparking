@@ -1,38 +1,44 @@
 package yuparking.gui.Manager;
 
 import yuparking.models.User;
-import yuparking.services.ParkingSensorService;
+import yuparking.services.ParkingLotService;
 import yuparking.gui.Login.ManagerDashboardGUI;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class OccupancyUpdateGUI {
+public class RemoveLotGUI {
     private JFrame frame;
     private JPanel panel;
-    private ParkingSensorService sensorService;
+    private JTextField lotIdField;
+    private ParkingLotService parkingLotService;
     private User currentUser;
 
-    public OccupancyUpdateGUI(User user) {
+    public RemoveLotGUI(User user) {
         this.currentUser = user;
-        this.sensorService = new ParkingSensorService();
+        this.parkingLotService = new ParkingLotService();
         initializeUI();
     }
 
     private void initializeUI() {
-        frame = new JFrame("Simulate Occupancy Update");
+        frame = new JFrame("Remove Parking Lot");
         frame.setSize(400, 200);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLocationRelativeTo(null);
 
         panel = new JPanel();
-        panel.setLayout(new GridLayout(3, 2, 5, 5));
+        panel.setLayout(new GridLayout(4, 2, 5, 5));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Simulate button
-        JButton simulateButton = new JButton("Simulate Sensor Update");
-        simulateButton.addActionListener(e -> handleSimulation());
-        panel.add(simulateButton);
+        // Lot ID input
+        panel.add(new JLabel("Lot ID:"));
+        lotIdField = new JTextField();
+        panel.add(lotIdField);
+
+        // Remove button
+        JButton removeButton = new JButton("Remove Lot");
+        removeButton.addActionListener(e -> handleRemoveLot());
+        panel.add(removeButton);
 
         // Back button
         JButton backButton = new JButton("Return to Dashboard");
@@ -43,13 +49,15 @@ public class OccupancyUpdateGUI {
         frame.setVisible(true);
     }
 
-    private void handleSimulation() {
+    private void handleRemoveLot() {
         try {
-            sensorService.simulateOccupancyUpdate();
+            int lotId = Integer.parseInt(lotIdField.getText());
+            
+            parkingLotService.removeParkingLot(lotId);
             
             int choice = JOptionPane.showOptionDialog(frame,
-                "Occupancy statuses updated from simulated sensors.",
-                "Simulation Success",
+                "Parking lot removed successfully!",
+                "Success",
                 JOptionPane.DEFAULT_OPTION,
                 JOptionPane.INFORMATION_MESSAGE,
                 null,
@@ -59,9 +67,14 @@ public class OccupancyUpdateGUI {
             if (choice == 0) {
                 frame.dispose();
             }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(frame,
+                "Please enter a valid Lot ID (number)",
+                "Invalid Input",
+                JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(frame,
-                "Error simulating occupancy update: " + e.getMessage(),
+                "Error removing parking lot: " + e.getMessage(),
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
         }

@@ -10,27 +10,29 @@ import yuparking.gui.Manager.AddSpaceGUI;
 import yuparking.gui.Manager.RemoveSpaceGUI;
 import yuparking.gui.Manager.OccupancyUpdateGUI;
 import yuparking.gui.Manager.ManualSpaceStatusGUI;
+import yuparking.gui.Manager.AddNewLotGUI;
+import yuparking.gui.Manager.RemoveLotGUI;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class ManagerDashboardGUI {
+public class SuperManagerDashboardGUI {
     private JFrame frame;
     private User user;
 
-    public ManagerDashboardGUI(User user) {
+    public SuperManagerDashboardGUI(User user) {
         this.user = user;
         initializeUI();
     }
 
     private void initializeUI() {
-        frame = new JFrame("Manager Dashboard - " + user.getUserType());
-        frame.setSize(500, 800);
+        frame = new JFrame("Super Manager Dashboard - " + user.getUserType());
+        frame.setSize(500, 1000);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLocationRelativeTo(null);
 
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(12, 1));
+        panel.setLayout(new GridLayout(14, 1));
 
         JLabel welcomeLabel = new JLabel("Welcome, " + user.getEmail(), SwingConstants.CENTER);
         panel.add(welcomeLabel);
@@ -46,7 +48,9 @@ public class ManagerDashboardGUI {
         JButton removeSpaceButton = new JButton("8. Remove Parking Space");
         JButton occupancyUpdateButton = new JButton("9. Simulate Occupancy Update");
         JButton manualStatusButton = new JButton("10. Manually Update Space Status");
-        JButton logoutButton = new JButton("11. Log out of manager dashboard");
+        JButton addNewLotButton = new JButton("11. Add New Parking Lot");
+        JButton removeLotButton = new JButton("12. Remove Parking Lot");
+        JButton logoutButton = new JButton("13. Log out of manager dashboard");
 
         // Add action listeners
         viewBookingsButton.addActionListener(e -> new AllBookingGUI(user));
@@ -59,6 +63,8 @@ public class ManagerDashboardGUI {
         removeSpaceButton.addActionListener(e -> new RemoveSpaceGUI(user));
         occupancyUpdateButton.addActionListener(e -> new OccupancyUpdateGUI(user));
         manualStatusButton.addActionListener(e -> new ManualSpaceStatusGUI(user));
+        addNewLotButton.addActionListener(e -> new AddNewLotGUI(user));
+        removeLotButton.addActionListener(e -> new RemoveLotGUI(user));
         logoutButton.addActionListener(e -> {
             frame.dispose();
             new LoginGUI();
@@ -75,9 +81,11 @@ public class ManagerDashboardGUI {
         panel.add(removeSpaceButton);
         panel.add(occupancyUpdateButton);
         panel.add(manualStatusButton);
+        panel.add(addNewLotButton);
+        panel.add(removeLotButton);
         panel.add(logoutButton);
 
         frame.add(panel);
         frame.setVisible(true);
     }
-}
+} 

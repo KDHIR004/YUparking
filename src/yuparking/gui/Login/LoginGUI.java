@@ -84,7 +84,9 @@ public class LoginGUI {
                 loginService.updateVerificationInCSV(loggedInUser.getUserID());
             }
             frame.dispose(); // Close login window
-            if (loggedInUser.getUserType().equals("manager") || loggedInUser.getUserType().equals("super_manager")) {
+            if (loggedInUser.getUserType().equals("super_manager")) {
+                new SuperManagerDashboardGUI(loggedInUser);
+            } else if (loggedInUser.getUserType().equals("manager")) {
                 new ManagerDashboardGUI(loggedInUser);
             } else {
                 new BookingMenuGUI(loggedInUser);
