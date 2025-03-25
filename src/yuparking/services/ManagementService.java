@@ -2,6 +2,7 @@ package yuparking.services;
 
 import yuparking.database.Database;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class ManagementService {
@@ -27,6 +28,15 @@ public class ManagementService {
 
     public void modifyAnyBooking(int bookingID, String newStartTime, String newEndTime) {
         List<String[]> bookings = db.retrieveData("bookings");
+
+        LocalDateTime newStart = LocalDateTime.parse(newStartTime);
+        LocalDateTime newEnd = LocalDateTime.parse(newEndTime);
+
+        if (newEnd.isBefore(newStart) || newEnd.equals(newStart)) {
+            System.out.println("Invalid time range: End time must be after start time.");
+            return;
+        }
+    
         for (int i = 1; i < bookings.size(); i++) {
             String[] row = bookings.get(i);
             if (row[0].equals(String.valueOf(bookingID))) {

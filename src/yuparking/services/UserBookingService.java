@@ -2,13 +2,17 @@ package yuparking.services;
 
 import yuparking.database.Database;
 import yuparking.models.User;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class UserBookingService {
     private final Database db;
+    private final BookingService bookingService;
 
     public UserBookingService() {
         this.db = new Database();
+        this.bookingService = new BookingService();
     }
 
     public void showUserBookings(User user) {
@@ -33,6 +37,8 @@ public class UserBookingService {
 
     public void cancelUserBooking(User user, int bookingID) {
         List<String[]> bookings = db.retrieveData("bookings");
+        PaymentService paymentService = new PaymentService();
+
         for (int i = 1; i < bookings.size(); i++) {  // start from index 1
             String[] row = bookings.get(i);
             int bookingUserId = Integer.parseInt(row[1]);
@@ -44,6 +50,7 @@ public class UserBookingService {
                 } else {
                     System.out.println("Booking is already cancelled.");
                 }
+                paymentService.refundPayment(bookingID);
                 return;
             }
         }
@@ -53,6 +60,14 @@ public class UserBookingService {
 
     public void modifyUserBooking(User user, int bookingID, String newStartTime, String newEndTime) {
         List<String[]> bookings = db.retrieveData("bookings");
+
+        LocalDateTime newStart = LocalDateTime.parse(newStartTime);
+        LocalDateTime newEnd = LocalDateTime.parse(newEndTime);
+
+        if (newEnd.isBefore(newStart) || newEnd.equals(newStart)) {
+            System.out.println("Invalid time range: End time must be after start time.");
+            return;
+        }
         for (int i = 1; i < bookings.size(); i++) {  // Start from i = 1 to skip header
             String[] row = bookings.get(i);
             int bookingUserId = Integer.parseInt(row[1]);
@@ -77,6 +92,14 @@ public class UserBookingService {
             System.out.println("User " + user.getEmail() + " is not verified. Cannot create booking.");
             return;
         }
+        LocalDateTime start = LocalDateTime.parse(startTime);
+        LocalDateTime end = LocalDateTime.parse(endTime);
+
+        if (end.isBefore(start) || end.equals(start)) {
+            System.out.println("End time cannot be before start time.");
+            return;
+        }
+
     
         List<String[]> bookings = db.retrieveData("bookings");
         int nextBookingID = bookings.size();
@@ -92,10 +115,16 @@ public class UserBookingService {
     
         bookings.add(bookingRow);
         db.confirmUpdate("bookings", bookings);
+
+        long hours = Duration.between(LocalDateTime.parse(startTime), LocalDateTime.parse(endTime)).toHours();
+        double fee = bookingService.calculateFeeForBooking(user, (int) hours);
+
     
         System.out.println("Booking created for user: " + user.getEmail() +
                 " | Booking ID: " + nextBookingID +
-                " | Space ID: " + spaceID);
+                " | Space ID: " + spaceID +
+                " | Duration: " + hours + " hours" +
+                " | Parking Fee: $" + fee);
     }
     
 }
