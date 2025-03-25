@@ -1,6 +1,10 @@
 package yuparking.gui.Login;
 
 import yuparking.models.User;
+import yuparking.gui.Manager.AllBookingGUI;
+import yuparking.gui.Manager.M_ModifyBookingGUI;
+import yuparking.gui.Manager.M_CancelBookingGUI;
+import yuparking.gui.Manager.ParkingSpaceGUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,6 +36,11 @@ public class ManagerDashboardGUI {
         JButton viewParkingLotsButton = new JButton("View Parking Lots");
         JButton logoutButton = new JButton("Logout");
 
+        // Add action listeners
+        viewBookingsButton.addActionListener(e -> new AllBookingGUI(user));
+        modifyBookingButton.addActionListener(e -> new M_ModifyBookingGUI(user));
+        cancelBookingButton.addActionListener(e -> new M_CancelBookingGUI(user));
+        viewParkingLotsButton.addActionListener(e -> new ParkingSpaceGUI(user));
         logoutButton.addActionListener(e -> frame.dispose());
 
         panel.add(viewBookingsButton);
