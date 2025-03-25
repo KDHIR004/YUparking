@@ -1,6 +1,7 @@
-package yuparking.gui;
+package yuparking.gui.Login;
 
 import yuparking.factory.UserFactory;
+import yuparking.gui.BookingMenuGUI;
 import yuparking.models.User;
 import yuparking.services.LoginService;
 import yuparking.services.SignupService;
@@ -9,7 +10,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 
 public class LoginGUI {
     private LoginService loginService;

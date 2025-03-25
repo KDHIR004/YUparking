@@ -1,4 +1,4 @@
-package yuparking.gui;
+package yuparking.gui.Login;
 
 import yuparking.models.User;
 

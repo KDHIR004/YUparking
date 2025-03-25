@@ -7,6 +7,4 @@ id,email,password,usertype,verified
 6,visitor1@gmail.ca,visitpass1,visitor,false
 7,student2@my.yorku.ca,Stu123,faculty,false
 8,stu1@yorku.ca,stu123,student,true
-9,nhiingo146@gmail.com,admin,student,true
-10,nhiingo146@gmail.com,admin,student,false
-11,admin@gmail.com,2,staff,false
+9,nhiingo146@gmail.com,123456!,student,false
