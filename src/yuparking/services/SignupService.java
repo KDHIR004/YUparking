@@ -30,13 +30,28 @@ public class SignupService {
             System.out.println("Invalid user type: " + userType + ". Allowed types are: faculty, staff, student, visitor.");
             return false;
         }
+        if (!isValidYorkEmail(email, userType)) {
+            System.out.println("Email does not match the required format for user type " + userType + ".");
+            return false;
+        }
+
+        if (!isPasswordStrong(password)) {
+            System.out.println("Password must be at least 8 characters long, with uppercase, lowercase, number, and special character.");
+            return false;
+        }
         List<String[]> users = db.retrieveData("users");
+        for (String[] row : users) {
+            if (row[1].equalsIgnoreCase(email)) {
+                System.out.println("Email already exists. Login to Account");
+                return false;
+            }
+        }        
         String[] newUser = new String[]{
-                String.valueOf(nextUserId),
-                email,
-                password,
-                userType.toLowerCase(),
-                "false"  // verification
+            String.valueOf(nextUserId),
+            email,
+            password,
+            userType.toLowerCase(),
+            "false"  // verification
         };
         users.add(newUser);
         db.confirmUpdate("users", users);
@@ -45,5 +60,20 @@ public class SignupService {
         //After signup
         nextUserId++;
         return true;
+        
+    }
+    private boolean isPasswordStrong(String password) {
+        return password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).{8,}$");
+    }
+
+    private boolean isValidYorkEmail(String email, String userType) {
+        if (userType.equalsIgnoreCase("student")) {
+            return email.endsWith("@my.yorku.ca");
+        } else if (userType.equalsIgnoreCase("faculty") || userType.equalsIgnoreCase("staff") || userType.equalsIgnoreCase("manager")) {
+            return email.endsWith("@yorku.ca");
+        } else if (userType.equalsIgnoreCase("visitor")) {
+            return !email.endsWith("@yorku.ca") && !email.endsWith("@my.yorku.ca");
+        }
+        return false;
     }
 }

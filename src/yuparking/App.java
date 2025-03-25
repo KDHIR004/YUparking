@@ -28,67 +28,81 @@ public class App {
             System.out.println("2. Sign Up");
             System.out.println("3. Exit");
             System.out.print("Choose option: ");
-            int choice = sc.nextInt();
-            sc.nextLine();  // consume newline
+            try {
+                int choice = sc.nextInt();
+                sc.nextLine(); // consume newline
+                switch (choice) {
+                    case 1:
+                        System.out.print("Enter email: ");
+                        String loginEmail = sc.nextLine();
+                        System.out.print("Enter password: ");
+                        String loginPassword = sc.nextLine();
+                        loggedInUser = loginService.login(loginEmail, loginPassword);
+                        if (loggedInUser != null) {
+                            System.out.println("Welcome " + loggedInUser.getEmail() + " (" + loggedInUser.getUserType() + ")");
+                            // Simulate verification click if user not verified (in object form)
+                            if (!loggedInUser.isVerified()) {
+                                System.out.println("Your email is not verified. Simulating verification now...");
+                                loggedInUser.clickVerificationLink();
+                                loginService.updateVerificationInCSV(loggedInUser.getUserID());
 
-            switch (choice) {
-                case 1:
-                    System.out.print("Enter email: ");
-                    String loginEmail = sc.nextLine();
-                    System.out.print("Enter password: ");
-                    String loginPassword = sc.nextLine();
-                    loggedInUser = loginService.login(loginEmail, loginPassword);
-                    if (loggedInUser != null) {
-                        System.out.println("Welcome " + loggedInUser.getEmail() + " (" + loggedInUser.getUserType() + ")");
-                        // Simulate verification click if user not verified (in object form)
-                        if (!loggedInUser.isVerified()) {
-                            System.out.println("Your email is not verified. Simulating verification now...");
-                            loggedInUser.clickVerificationLink();
-                            loginService.updateVerificationInCSV(loggedInUser.getUserID());
+                            }
 
+                            // Manager or super_manager login
+                            if (loggedInUser.getUserType().equals("manager") || loggedInUser.getUserType().equals("super_manager")) {
+                                showManagerDashboard(loggedInUser);
+                            } else {
+                                showUserBookingMenu(loggedInUser);
+                            }
                         }
+                        break;
 
-                        // Manager or super_manager login
-                        if (loggedInUser.getUserType().equals("manager") || loggedInUser.getUserType().equals("super_manager")) {
-                            showManagerDashboard(loggedInUser);
-                        } else {
-                            showUserBookingMenu(loggedInUser);
-                        }
-                    }
-                    break;
-
-                case 2:
-                    System.out.print("Enter email: ");
-                    String email = sc.nextLine();
-                    System.out.print("Enter password: ");
-                    String password = sc.nextLine();
-                    String userType = "vistor";
-                    boolean success = false;
-                    while (!success) {
+                    case 2:
+                    String userType;
+                    boolean typeValid = false;
+                
+                    // Ask for user type first
+                    while (!typeValid) {
                         System.out.print("Enter user type (faculty, staff, student, visitor): ");
-                        userType = sc.nextLine();
-                        success = signupService.signup(email, password, userType);
-                        if (!success) {
-                            System.out.println("Please enter a valid user type and try again.");
+                        userType = sc.nextLine().toLowerCase();
+                
+                        if (userType.equals("faculty") || userType.equals("staff") || userType.equals("student") || userType.equals("visitor")) {
+                            typeValid = true;
+                
+                            // Now ask for email and password after type is confirmed
+                            System.out.print("Enter email: ");
+                            String email = sc.nextLine();
+                
+                            System.out.print("Enter password (8+ chars, upper/lowercase, number & special char): ");
+                            String password = sc.nextLine();
+                
+                            boolean success = signupService.signup(email, password, userType);
+                            if (success) {
+                                System.out.println("Account created! Simulating verification...");
+                                int newUserId = signupService.getNextUserId() - 1;
+                                User newUser = UserFactory.createUser(newUserId, email, password, userType);
+                                newUser.clickVerificationLink();
+                                loginService.updateVerificationInCSV(newUserId);
+                            } else {
+                                System.out.println("Account creation failed. Please follow email & password rules and try again.");
+                            }
+                        } else {
+                            System.out.println("Invalid user type. Please enter faculty, staff, student, or visitor.");
                         }
                     }
-
-                    signupService.signup(email, password, userType);
-                    // Simulate verification immediately after signup:
-                    System.out.println("Simulating clicking verification link for this new user...");
-                    int newUserId = signupService.getNextUserId() - 1;  // Id created
-                    User newUser = UserFactory.createUser(newUserId, email, password, userType);
-                    newUser.clickVerificationLink();
-                    users.add(newUser); // Add newly created user to the list
                     break;
+                
+                    case 3:
+                        System.out.println("Exiting YuParking System. Goodbye!");
+                        return;
 
-                case 3:
-                    System.out.println("Exiting YuParking System. Goodbye!");
-                    return;
-
-                default:
-                    System.out.println("Invalid option. Try again.");
-            }
+                    default:
+                        System.out.println("Invalid option. Try again.");
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please enter a number (1, 2, or 3).");
+                sc.nextLine(); // consume invalid input 
+            } 
         }
     }
 
