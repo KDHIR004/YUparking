@@ -30,6 +30,10 @@ public class LoginService {
         return userList;
     }
 
+    public List<User> getAllUsers() {
+        return users;
+    }
+
     public User login(String email, String password) {
         for (User user : users) {
             if (user.getEmail().equalsIgnoreCase(email) && user.getPassword().equals(password)) {
@@ -40,4 +44,20 @@ public class LoginService {
         System.out.println("Login failed: Incorrect email or password.");
         return null;
     }
+
+    //this will update csv after verification
+    public void updateVerificationInCSV(int userId) {
+        List<String[]> usersData = db.retrieveData("users");
+        for (int i = 1; i < usersData.size(); i++) { 
+            String[] row = usersData.get(i);
+            if (Integer.parseInt(row[0]) == userId) {
+                row[4] = "true"; 
+                db.confirmUpdate("users", usersData);
+                System.out.println("User verification updated in users.csv for user ID: " + userId);
+                return;
+            }
+        }
+    }
+    
+    
 }

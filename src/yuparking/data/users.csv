@@ -4,5 +4,4 @@ id,email,password,usertype,verified
 3,student1@my.yorku.ca,studpass1,student,false
 4,visitor1@gmail.ca,visitpass1,visitor,false
 5,student2@my.yorku.ca,Stu123,faculty,false
-6,stu1@yorku.ca,stu123,student,false
-7,stu1@yorku.ca,stu123,student,false
+6,stu1@yorku.ca,stu123,student,true

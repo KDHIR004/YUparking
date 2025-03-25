@@ -4,6 +4,7 @@ import yuparking.models.*;
 import yuparking.factory.UserFactory;
 import yuparking.services.LoginService;
 import yuparking.services.SignupService;
+import yuparking.services.UserBookingService;
 import yuparking.services.BookingService;
 
 import java.util.List;
@@ -41,10 +42,13 @@ public class App {
                         if (!loggedInUser.isVerified()) {
                             System.out.println("Your email is not verified. Simulating verification now...");
                             loggedInUser.clickVerificationLink();
+                            loginService.updateVerificationInCSV(loggedInUser.getUserID());
+
                         }
 
+
                         // After successful login, open booking menu
-                        showBookingMenu(loggedInUser, users);
+                        showUserBookingMenu(loggedInUser);
                     }
                     break;
 
@@ -84,8 +88,8 @@ public class App {
     }
 
     // Booking menu shown after login
-    private static void showBookingMenu(User loggedInUser, List<User> users) {
-        BookingService bookingService = new BookingService(users);
+    private static void showUserBookingMenu(User loggedInUser) {
+        UserBookingService userBookingService = new UserBookingService();
         Scanner sc = new Scanner(System.in);
 
         while (true) {
@@ -101,37 +105,37 @@ public class App {
 
             switch (choice) {
                 case 1:
-                    System.out.print("Enter SpaceID: ");
-                    int spaceID = sc.nextInt();
-                    sc.nextLine();
-                    System.out.print("Enter Start Time (yyyy-MM-ddTHH:mm): ");
-                    String startTime = sc.nextLine();
-                    System.out.print("Enter End Time (yyyy-MM-ddTHH:mm): ");
-                    String endTime = sc.nextLine();
-                    bookingService.createBooking(loggedInUser, spaceID, startTime, endTime);
-                    break;
+                System.out.print("Enter SpaceID: ");
+                int spaceID = sc.nextInt();
+                sc.nextLine();
+                System.out.print("Enter Start Time (yyyy-MM-ddTHH:mm): ");
+                String startTime = sc.nextLine();
+                System.out.print("Enter End Time (yyyy-MM-ddTHH:mm): ");
+                String endTime = sc.nextLine();
+                userBookingService.createUserBooking(loggedInUser, spaceID, startTime, endTime);
+                break;
 
                 case 2:
-                    System.out.print("Enter Booking ID to modify: ");
-                    int bookingIdToModify = sc.nextInt();
-                    sc.nextLine();
-                    System.out.print("New Start Time (yyyy-MM-ddTHH:mm): ");
-                    String newStartTime = sc.nextLine();
-                    System.out.print("New End Time (yyyy-MM-ddTHH:mm): ");
-                    String newEndTime = sc.nextLine();
-                    bookingService.modifyBooking(bookingIdToModify, newStartTime, newEndTime);
-                    break;
+                System.out.print("Enter Booking ID to modify: ");
+                int bookingIdToModify = sc.nextInt();
+                sc.nextLine();
+                System.out.print("New Start Time (yyyy-MM-ddTHH:mm): ");
+                String newStartTime = sc.nextLine();
+                System.out.print("New End Time (yyyy-MM-ddTHH:mm): ");
+                String newEndTime = sc.nextLine();
+                userBookingService.modifyUserBooking(loggedInUser, bookingIdToModify, newStartTime, newEndTime);
+                break;
 
                 case 3:
-                    System.out.print("Enter Booking ID to cancel: ");
-                    int bookingIdToCancel = sc.nextInt();
-                    sc.nextLine();
-                    bookingService.cancelBooking(bookingIdToCancel);
-                    break;
+                System.out.print("Enter Booking ID to cancel: ");
+                int bookingIdToCancel = sc.nextInt();
+                sc.nextLine();
+                userBookingService.cancelUserBooking(loggedInUser, bookingIdToCancel);
+                break;
 
                 case 4:
-                    bookingService.showAllBookings();
-                    break;
+                userBookingService.showUserBookings(loggedInUser);
+                break;
 
                 case 5:
                     System.out.println("Logging out of booking menu...");
