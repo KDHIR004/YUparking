@@ -89,8 +89,8 @@ public class PaymentGUI {
                     found = true;
                     
                     // Calculate duration in hours
-                    String startTime = booking[2];
-                    String endTime = booking[3];
+                    String startTime = booking[3];  // Start time is in column 3
+                    String endTime = booking[4];    // End time is in column 4
                     int hours = calculateHours(startTime, endTime);
                     
                     // Calculate fee based on user type using BookingService
@@ -115,7 +115,7 @@ public class PaymentGUI {
                             "Duration: %d hours\n" +
                             "Fee: $%.2f\n" +
                             "Payment Status: %s",
-                            booking[1], startTime, endTime, hours, fee, paymentStatus),
+                            booking[2], formatDateTime(startTime), formatDateTime(endTime), hours, fee, paymentStatus),
                         "Booking Details",
                         JOptionPane.INFORMATION_MESSAGE);
                     break;
@@ -132,6 +132,11 @@ public class PaymentGUI {
             JOptionPane.showMessageDialog(frame,
                 "Please enter a valid Booking ID",
                 "Invalid Input",
+                JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(frame,
+                "Error showing booking details: " + e.getMessage(),
+                "Error",
                 JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -152,8 +157,8 @@ public class PaymentGUI {
                     found = true;
                     
                     // Calculate duration and fee
-                    String startTime = booking[2];
-                    String endTime = booking[3];
+                    String startTime = booking[3];  // Start time is in column 3
+                    String endTime = booking[4];    // End time is in column 4
                     int hours = calculateHours(startTime, endTime);
                     double fee = bookingService.calculateFeeForBooking(currentUser, hours);
                     
@@ -202,6 +207,11 @@ public class PaymentGUI {
                 "Please enter a valid Booking ID",
                 "Invalid Input",
                 JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(frame,
+                "Error processing payment: " + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -210,5 +220,12 @@ public class PaymentGUI {
         LocalDateTime start = LocalDateTime.parse(startTime, formatter);
         LocalDateTime end = LocalDateTime.parse(endTime, formatter);
         return (int) ChronoUnit.HOURS.between(start, end);
+    }
+
+    private String formatDateTime(String dateTime) {
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime dateTimeObj = LocalDateTime.parse(dateTime, inputFormatter);
+        return dateTimeObj.format(outputFormatter);
     }
 } 

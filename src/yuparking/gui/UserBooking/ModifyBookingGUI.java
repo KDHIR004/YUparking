@@ -112,23 +112,28 @@ public class ModifyBookingGUI {
             timeFormat.parse(newEndTime);
 
             // Check if booking exists and is eligible for modification
-            if (!isBookingEligibleForModification(bookingId)) {
+            List<String[]> bookings = db.retrieveData("bookings");
+            boolean found = false;
+            int bookingIndex = -1;
+            
+            for (int i = 1; i < bookings.size(); i++) {
+                String[] row = bookings.get(i);
+                if (row[0].equals(String.valueOf(bookingId))) {
+                    int bookingUserId = Integer.parseInt(row[1]);
+                    if (bookingUserId == currentUser.getUserID() && !row[5].equalsIgnoreCase("Cancelled")) {
+                        found = true;
+                        bookingIndex = i;
+                        break;
+                    }
+                }
+            }
+
+            if (!found) {
                 JOptionPane.showMessageDialog(frame,
                     "Booking not found or is not eligible for modification. Only active bookings can be modified.",
                     "Invalid Booking",
                     JOptionPane.ERROR_MESSAGE);
                 return;
-            }
-
-            // Get space ID from booking
-            List<String[]> bookings = db.retrieveData("bookings");
-            int spaceId = -1;
-            for (int i = 1; i < bookings.size(); i++) {
-                String[] row = bookings.get(i);
-                if (row[0].equals(String.valueOf(bookingId))) {
-                    spaceId = Integer.parseInt(row[2]);
-                    break;
-                }
             }
 
             // Format times to ensure HH:mm format
@@ -146,8 +151,15 @@ public class ModifyBookingGUI {
             String combinedStartDateTime = newDate + "T" + formattedStartTime + ":00";
             String combinedEndDateTime = newDate + "T" + formattedEndTime + ":00";
 
-            // Modify the booking
-            userBookingService.modifyUserBooking(currentUser, bookingId, combinedStartDateTime, combinedEndDateTime);
+            // Update the booking record
+            String[] bookingToUpdate = bookings.get(bookingIndex);
+            bookingToUpdate[3] = combinedStartDateTime;  // Start time
+            bookingToUpdate[4] = combinedEndDateTime;    // End time
+            bookingToUpdate[5] = "Modified";             // Status
+            bookings.set(bookingIndex, bookingToUpdate);
+
+            // Update the database
+            db.confirmUpdate("bookings", bookings);
 
             // Show confirmation dialog
             JOptionPane.showMessageDialog(frame,

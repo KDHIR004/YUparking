@@ -5,6 +5,7 @@ import yuparking.services.UserBookingService;
 import yuparking.services.ParkingLotService;
 import yuparking.database.Database;
 import yuparking.gui.Login.BookingMenuGUI;
+import yuparking.gui.UserBooking.PaymentGUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,6 +17,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.io.File;
+import java.time.LocalDateTime;
 
 public class CreateBookingGUI {
     private JFrame frame;
@@ -176,10 +178,35 @@ public class CreateBookingGUI {
             String formattedTime = formattedHour + ":" + formattedMinute;
 
             // Combine date and time into ISO format
-            String combinedDateTime = date + "T" + formattedTime + ":00";
+            String startDateTime = date + "T" + formattedTime + ":00";
+            
+            // Calculate end time (1 hour after start time)
+            LocalDateTime endTime = LocalDateTime.parse(startDateTime).plusHours(1);
+            String endDateTime = endTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 
-            // Create the booking
-            userBookingService.createUserBooking(currentUser, spaceId, combinedDateTime, combinedDateTime);
+            // Get current bookings to determine next booking ID
+            List<String[]> bookings = db.retrieveData("bookings");
+            int nextBookingId = 0;
+            for (int i = 1; i < bookings.size(); i++) {
+                int currentId = Integer.parseInt(bookings.get(i)[0]);
+                if (currentId >= nextBookingId) {
+                    nextBookingId = currentId + 1;
+                }
+            }
+
+            // Create new booking record
+            String[] newBooking = {
+                String.valueOf(nextBookingId),
+                String.valueOf(currentUser.getUserID()),
+                String.valueOf(spaceId),
+                startDateTime,
+                endDateTime,
+                "Booked"
+            };
+            bookings.add(newBooking);
+
+            // Update the database
+            db.confirmUpdate("bookings", bookings);
 
             // Update space status to occupied
             parkingLotService.updateSpaceStatus(spaceId, "occupied");
@@ -187,10 +214,12 @@ public class CreateBookingGUI {
             // Show confirmation dialog
             JOptionPane.showMessageDialog(frame,
                 String.format("Booking created successfully!\n" +
+                    "Booking ID: %d\n" +
                     "Space ID: %d\n" +
                     "Date: %s\n" +
-                    "Time: %s",
-                    spaceId, date, formattedTime),
+                    "Time: %s\n\n" +
+                    "Please go to Payment menu to complete your payment.",
+                    nextBookingId, spaceId, date, formattedTime),
                 "Booking Confirmation",
                 JOptionPane.INFORMATION_MESSAGE);
 

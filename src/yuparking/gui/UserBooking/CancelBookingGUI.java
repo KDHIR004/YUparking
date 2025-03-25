@@ -68,14 +68,18 @@ public class CancelBookingGUI {
             boolean bookingFound = false;
             boolean belongsToUser = false;
             boolean isAlreadyCancelled = false;
+            int spaceId = -1;
+            int bookingIndex = -1;
             
             for (int i = 1; i < bookings.size(); i++) {
                 String[] row = bookings.get(i);
                 if (row[0].equals(String.valueOf(bookingId))) {
                     bookingFound = true;
+                    bookingIndex = i;
                     int bookingUserId = Integer.parseInt(row[1]);
                     belongsToUser = (bookingUserId == currentUser.getUserID());
                     isAlreadyCancelled = row[5].equalsIgnoreCase("Cancelled");
+                    spaceId = Integer.parseInt(row[2]);  // Get space ID from booking
                     break;
                 }
             }
@@ -104,18 +108,13 @@ public class CancelBookingGUI {
                 return;
             }
             
-            // Get space ID from booking
-            int spaceId = -1;
-            for (int i = 1; i < bookings.size(); i++) {
-                String[] row = bookings.get(i);
-                if (row[0].equals(String.valueOf(bookingId))) {
-                    spaceId = Integer.parseInt(row[2]);
-                    break;
-                }
-            }
+            // Update booking status to Cancelled
+            String[] bookingToUpdate = bookings.get(bookingIndex);
+            bookingToUpdate[5] = "Cancelled";
+            bookings.set(bookingIndex, bookingToUpdate);
             
-            // Cancel the booking
-            userBookingService.cancelUserBooking(currentUser, bookingId);
+            // Update the database
+            db.confirmUpdate("bookings", bookings);
             
             // Update space status to vacant
             if (spaceId != -1) {
