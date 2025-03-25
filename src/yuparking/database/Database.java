@@ -14,10 +14,7 @@ public class Database {
         connectionInfo.put("parkinglots", "src/yuparking/data/parkinglots.csv");  //future
         connectionInfo.put("payments", "src/yuparking/data/payments.csv");
         connectionInfo.put("parkingspaces", "src/yuparking/data/parkingspaces.csv");
-
-
-
-
+        
         dataTables = new ArrayList<>(connectionInfo.keySet());
     }
 

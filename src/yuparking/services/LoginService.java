@@ -47,17 +47,19 @@ public class LoginService {
 
     //this will update csv after verification
     public void updateVerificationInCSV(int userId) {
-        List<String[]> usersData = db.retrieveData("users");
-        for (int i = 1; i < usersData.size(); i++) { 
-            String[] row = usersData.get(i);
+        List<String[]> users = db.retrieveData("users");
+        for (int i = 1; i < users.size(); i++) { 
+            String[] row = users.get(i);
             if (Integer.parseInt(row[0]) == userId) {
-                row[4] = "true"; 
-                db.confirmUpdate("users", usersData);
+                row[4] = "true";
+                db.confirmUpdate("users", users);
                 System.out.println("User verification updated in users.csv for user ID: " + userId);
                 return;
             }
         }
+        System.out.println("User ID not found for verification update.");
     }
+    
     
     
 }
