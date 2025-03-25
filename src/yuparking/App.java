@@ -3,9 +3,9 @@ package yuparking;
 import yuparking.models.*;
 import yuparking.factory.UserFactory;
 import yuparking.services.LoginService;
+import yuparking.services.ManagementService;
 import yuparking.services.SignupService;
 import yuparking.services.UserBookingService;
-import yuparking.services.BookingService;
 
 import java.util.List;
 import java.util.Scanner;
@@ -46,9 +46,12 @@ public class App {
 
                         }
 
-
-                        // After successful login, open booking menu
-                        showUserBookingMenu(loggedInUser);
+                        // Manager or super_manager login
+                        if (loggedInUser.getUserType().equals("manager") || loggedInUser.getUserType().equals("super_manager")) {
+                            showManagerDashboard(loggedInUser);
+                        } else {
+                            showUserBookingMenu(loggedInUser);
+                        }
                     }
                     break;
 
@@ -141,6 +144,50 @@ public class App {
                     System.out.println("Logging out of booking menu...");
                     return;
 
+                default:
+                    System.out.println("Invalid choice. Try again.");
+            }
+        }
+    }
+
+
+    private static void showManagerDashboard(User managerUser) {
+        ManagementService managementService = new ManagementService();
+        Scanner sc = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("\n--- Manager Dashboard ---");
+            System.out.println("1. View All Bookings");
+            System.out.println("2. Modify Any Booking");
+            System.out.println("3. Cancel Any Booking");
+            System.out.println("4. Log out of manager dashboard");
+            System.out.print("Choose option: ");
+            int choice = sc.nextInt();
+            sc.nextLine();
+
+            switch (choice) {
+                case 1:
+                    managementService.viewDetailedHistory();
+                    break;
+                case 2:
+                    System.out.print("Enter Booking ID to modify: ");
+                    int bookingIdModify = sc.nextInt();
+                    sc.nextLine();
+                    System.out.print("New Start Time (yyyy-MM-ddTHH:mm): ");
+                    String newStart = sc.nextLine();
+                    System.out.print("New End Time (yyyy-MM-ddTHH:mm): ");
+                    String newEnd = sc.nextLine();
+                    managementService.modifyAnyBooking(bookingIdModify, newStart, newEnd);
+                    break;
+                case 3:
+                    System.out.print("Enter Booking ID to cancel: ");
+                    int bookingIdCancel = sc.nextInt();
+                    sc.nextLine();
+                    managementService.cancelAnyBooking(bookingIdCancel);
+                    break;
+                case 4:
+                    System.out.println("Logging out of manager dashboard...");
+                    return;
                 default:
                     System.out.println("Invalid choice. Try again.");
             }
