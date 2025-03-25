@@ -156,10 +156,11 @@ public class App {
     private static void showManagerDashboard(User managerUser) {
         ManagementService managementService = new ManagementService();
         ParkingLotService parkingLotService = new ParkingLotService();
+        ParkingSensorService sensorService = new ParkingSensorService();
         Scanner sc = new Scanner(System.in);
-
+    
         while (true) {
-            System.out.println("\n--- Manager Dashboard ---");
+            System.out.println("\n--- Manager Dashboard (" + managerUser.getUserType() + ") ---");
             System.out.println("1. View All Bookings");
             System.out.println("2. Modify Any Booking");
             System.out.println("3. Cancel Any Booking");
@@ -168,12 +169,19 @@ public class App {
             System.out.println("6. Disable Parking Lot");
             System.out.println("7. Add Parking Space");
             System.out.println("8. Remove Parking Space");
-            System.out.println("9. Log out of manager dashboard");
-            System.out.println("10. Simulate Occupancy Update");
+            System.out.println("9. Simulate Occupancy Update");
+            System.out.println("10. Manually Update Space Status");
+            System.out.println("11. Log out of manager dashboard");
+    
+            if (managerUser.getUserType().equals("super_manager")) {
+                System.out.println("12. Add New Parking Lot (Super Manager Only)");
+                System.out.println("13. Remove Parking Lot (Super Manager Only)");
+            }
+    
             System.out.print("Choose option: ");
             int choice = sc.nextInt();
             sc.nextLine(); // consume newline
-
+    
             switch (choice) {
                 case 1:
                     managementService.viewDetailedHistory();
@@ -209,15 +217,15 @@ public class App {
                     sc.nextLine();
                     parkingLotService.disableLot(lotIdDisable);
                     break;
-                    case 7:
+                case 7:
                     System.out.print("Enter Lot ID to add space to: ");
                     int lotIdAddSpace = sc.nextInt();
                     sc.nextLine();
-                    System.out.print("How many spaces do you want to add? ");
+                    System.out.print("How many spaces to add? ");
                     int numberOfSpaces = sc.nextInt();
                     sc.nextLine();
                     parkingLotService.addSpace(lotIdAddSpace, numberOfSpaces);
-                    break;                
+                    break;
                 case 8:
                     System.out.print("Enter Space ID to remove: ");
                     int spaceIdRemove = sc.nextInt();
@@ -225,17 +233,49 @@ public class App {
                     parkingLotService.removeSpace(spaceIdRemove);
                     break;
                 case 9:
-                    System.out.println("Logging out of manager dashboard...");
-                    return;
-                case 10:
-                    ParkingSensorService sensorService = new ParkingSensorService();
                     sensorService.simulateOccupancyUpdate();
                     break;
-
+                case 10:
+                    System.out.print("Enter Space ID to update: ");
+                    int spaceIdUpdate = sc.nextInt();
+                    sc.nextLine();
+                    System.out.print("Enter new status (occupied, vacant, maintenance): ");
+                    String newStatus = sc.nextLine();
+                    parkingLotService.updateSpaceStatus(spaceIdUpdate, newStatus);
+                    break;
+                case 11:
+                    System.out.println("Logging out of manager dashboard...");
+                    return;
+                case 12:
+                    if (managerUser.getUserType().equals("super_manager")) {
+                        System.out.print("Enter new Lot ID: ");
+                        int newLotID = sc.nextInt();
+                        sc.nextLine();
+                        System.out.print("Enter Lot Location: ");
+                        String location = sc.nextLine();
+                        System.out.print("Enter capacity: ");
+                        int capacity = sc.nextInt();
+                        sc.nextLine();
+                        parkingLotService.addNewParkingLot(newLotID, location, capacity);
+                    } else {
+                        System.out.println("Only Super Managers can add new parking lots.");
+                    }
+                    break;
+                case 13:
+                    if (managerUser.getUserType().equals("super_manager")) {
+                        System.out.print("Enter Lot ID to remove: ");
+                        int lotIdRemove = sc.nextInt();
+                        sc.nextLine();
+                        parkingLotService.removeParkingLot(lotIdRemove);
+                    } else {
+                        System.out.println("Only Super Managers can remove parking lots.");
+                    }
+                    break;
                 default:
                     System.out.println("Invalid choice. Try again.");
             }
         }
     }
+    
 
 }
