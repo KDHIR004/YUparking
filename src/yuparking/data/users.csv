@@ -1,9 +1,7 @@
 id,email,password,usertype,verified
 1,manager1@yorku.ca,man123,manager,true
-2,supermanager1@yorku.ca,superman123,super_manager,true
-3,faculty1@yorku.ca,facpass1,faculty,true
-4,staff1@yorku.ca,staffpass1,staff,true
-5,student1@my.yorku.ca,studpass1,student,false
-6,visitor1@gmail.ca,visitpass1,visitor,false
-7,student2@my.yorku.ca,Stu123,faculty,false
-8,stu1@yorku.ca,stu123,student,true
+2,supermanager@yorku.ca,superman123,manager,true
+3,faculty1@yorku.ca,fac123,faculty,true
+4,staff1@yorku.ca,staff123,staff,true
+5,student1@my.yorku.ca,stud123,student,true
+6,visitor1@gmail.ca,visit123,visitor,true

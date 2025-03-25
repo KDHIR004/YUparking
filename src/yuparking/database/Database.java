@@ -12,7 +12,10 @@ public class Database {
         connectionInfo.put("users", "src/yuparking/data/users.csv");
         connectionInfo.put("bookings", "src/yuparking/data/bookings.csv");  // future
         connectionInfo.put("parkinglots", "src/yuparking/data/parkinglots.csv");  //future
-        connectionInfo.put("bookings", "src/yuparking/data/bookings.csv");
+        connectionInfo.put("payments", "src/yuparking/data/payments.csv");
+        connectionInfo.put("parkingspaces", "src/yuparking/data/parkingspaces.csv");
+
+
 
 
         dataTables = new ArrayList<>(connectionInfo.keySet());
