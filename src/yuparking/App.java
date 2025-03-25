@@ -4,6 +4,8 @@ import yuparking.models.*;
 import yuparking.factory.UserFactory;
 import yuparking.services.LoginService;
 import yuparking.services.ManagementService;
+import yuparking.services.ParkingLotService;
+import yuparking.services.ParkingSensorService;
 import yuparking.services.SignupService;
 import yuparking.services.UserBookingService;
 
@@ -153,6 +155,7 @@ public class App {
 
     private static void showManagerDashboard(User managerUser) {
         ManagementService managementService = new ManagementService();
+        ParkingLotService parkingLotService = new ParkingLotService();
         Scanner sc = new Scanner(System.in);
 
         while (true) {
@@ -160,10 +163,16 @@ public class App {
             System.out.println("1. View All Bookings");
             System.out.println("2. Modify Any Booking");
             System.out.println("3. Cancel Any Booking");
-            System.out.println("4. Log out of manager dashboard");
+            System.out.println("4. View Parking Lots");
+            System.out.println("5. Enable Parking Lot");
+            System.out.println("6. Disable Parking Lot");
+            System.out.println("7. Add Parking Space");
+            System.out.println("8. Remove Parking Space");
+            System.out.println("9. Log out of manager dashboard");
+            System.out.println("10. Simulate Occupancy Update");
             System.out.print("Choose option: ");
             int choice = sc.nextInt();
-            sc.nextLine();
+            sc.nextLine(); // consume newline
 
             switch (choice) {
                 case 1:
@@ -186,11 +195,47 @@ public class App {
                     managementService.cancelAnyBooking(bookingIdCancel);
                     break;
                 case 4:
+                    parkingLotService.viewParkingLots();
+                    break;
+                case 5:
+                    System.out.print("Enter Lot ID to enable: ");
+                    int lotIdEnable = sc.nextInt();
+                    sc.nextLine();
+                    parkingLotService.enableLot(lotIdEnable);
+                    break;
+                case 6:
+                    System.out.print("Enter Lot ID to disable: ");
+                    int lotIdDisable = sc.nextInt();
+                    sc.nextLine();
+                    parkingLotService.disableLot(lotIdDisable);
+                    break;
+                    case 7:
+                    System.out.print("Enter Lot ID to add space to: ");
+                    int lotIdAddSpace = sc.nextInt();
+                    sc.nextLine();
+                    System.out.print("How many spaces do you want to add? ");
+                    int numberOfSpaces = sc.nextInt();
+                    sc.nextLine();
+                    parkingLotService.addSpace(lotIdAddSpace, numberOfSpaces);
+                    break;                
+                case 8:
+                    System.out.print("Enter Space ID to remove: ");
+                    int spaceIdRemove = sc.nextInt();
+                    sc.nextLine();
+                    parkingLotService.removeSpace(spaceIdRemove);
+                    break;
+                case 9:
                     System.out.println("Logging out of manager dashboard...");
                     return;
+                case 10:
+                    ParkingSensorService sensorService = new ParkingSensorService();
+                    sensorService.simulateOccupancyUpdate();
+                    break;
+
                 default:
                     System.out.println("Invalid choice. Try again.");
             }
         }
     }
+
 }

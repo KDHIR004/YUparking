@@ -1,0 +1,4 @@
+lotID,location,capacity,status
+1,North Lot,50,disabled
+2,South Lot,30,active
+3,East Lot,40,active
