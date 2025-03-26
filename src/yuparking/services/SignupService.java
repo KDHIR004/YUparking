@@ -45,14 +45,20 @@ public class SignupService {
                 System.out.println("Email already exists. Login to Account");
                 return false;
             }
-        }        
+        }
+        String verificationStatus = "false";
+        if (userType.equalsIgnoreCase("visitor")) {
+            verificationStatus = "true";
+        }
         String[] newUser = new String[]{
-            String.valueOf(nextUserId),
-            email,
-            password,
-            userType.toLowerCase(),
-            "false"  // verification
+                String.valueOf(nextUserId),
+                email,
+                password,
+                userType.toLowerCase(),
+                verificationStatus
         };
+
+
         users.add(newUser);
         db.confirmUpdate("users", users);
         System.out.println("Account created for " + email + " as " + userType + ". Verification pending.");
@@ -60,7 +66,7 @@ public class SignupService {
         //After signup
         nextUserId++;
         return true;
-        
+
     }
     private boolean isPasswordStrong(String password) {
         return password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).{8,}$");
