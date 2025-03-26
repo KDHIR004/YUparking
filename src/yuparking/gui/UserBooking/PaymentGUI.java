@@ -43,28 +43,23 @@ public class PaymentGUI {
         panel = new JPanel(new GridLayout(6, 2, 5, 5));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Booking ID input
         panel.add(new JLabel("Booking ID:"));
         bookingIdField = new JTextField();
         panel.add(bookingIdField);
 
-        // Payment method selection
         panel.add(new JLabel("Payment Method:"));
         String[] methods = {"Credit", "Debit", "Online"};
         paymentMethodComboBox = new JComboBox<>(methods);
         panel.add(paymentMethodComboBox);
 
-        // Show booking details button
         JButton showDetailsButton = new JButton("Show Booking Details");
         showDetailsButton.addActionListener(e -> showBookingDetails());
         panel.add(showDetailsButton);
 
-        // Process payment button
         JButton processButton = new JButton("Process Payment");
         processButton.addActionListener(e -> processPayment());
         panel.add(processButton);
 
-        // Back button
         JButton backButton = new JButton("Return to Menu");
         backButton.addActionListener(e -> {
             frame.dispose();
@@ -88,21 +83,17 @@ public class PaymentGUI {
                         Integer.parseInt(booking[1]) == currentUser.getUserID()) {
                     found = true;
 
-                    // Get start and end time from booking
-                    String startTime = booking[3];  // Start time is in column 3
-                    String endTime = booking[4];    // End time is in column 4
+                    String startTime = booking[3]; 
+                    String endTime = booking[4];    
 
-                    // Calculate duration in hours (as decimal)
                     long minutes = ChronoUnit.MINUTES.between(
                             LocalDateTime.parse(startTime),
                             LocalDateTime.parse(endTime)
                     );
                     double hours = minutes / 60.0;
 
-                    // Calculate fee based on hours
                     double fee = bookingService.calculateFeeForBooking(currentUser, hours);
 
-                    // Check if payment already exists
                     List<String[]> payments = db.retrieveData("payments");
                     String paymentStatus = "Not Paid";
                     for (int j = 1; j < payments.size(); j++) {
@@ -153,7 +144,6 @@ public class PaymentGUI {
             int bookingId = Integer.parseInt(bookingIdField.getText());
             String paymentMethod = (String) paymentMethodComboBox.getSelectedItem();
 
-            // Get booking details to calculate fee
             List<String[]> bookings = db.retrieveData("bookings");
             boolean found = false;
 
@@ -163,7 +153,6 @@ public class PaymentGUI {
                         Integer.parseInt(booking[1]) == currentUser.getUserID()) {
                     found = true;
 
-                    // Calculate duration in hours (as decimal)
                     String startTime = booking[3];
                     String endTime = booking[4];
                     long minutes = ChronoUnit.MINUTES.between(
@@ -172,10 +161,8 @@ public class PaymentGUI {
                     );
                     double hours = minutes / 60.0;
 
-                    // Calculate fee based on hours
                     double fee = bookingService.calculateFeeForBooking(currentUser, hours);
 
-                    // Check if payment already exists
                     List<String[]> payments = db.retrieveData("payments");
                     boolean alreadyPaid = false;
                     for (int j = 1; j < payments.size(); j++) {
@@ -195,7 +182,6 @@ public class PaymentGUI {
                         return;
                     }
 
-                    // Process payment using PaymentService
                     paymentService.processPayment(bookingId, fee, paymentMethod);
 
                     JOptionPane.showMessageDialog(frame,
