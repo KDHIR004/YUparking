@@ -33,20 +33,17 @@ public class AllBookingGUI {
         panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Create table model
         String[] columns = {"Booking ID", "User ID", "Space ID", "Start Time", "End Time", "Status"};
         DefaultTableModel model = new DefaultTableModel(columns, 0);
         JTable table = new JTable(model);
         JScrollPane scrollPane = new JScrollPane(table);
 
-        // Add data to table
         List<String[]> bookings = db.retrieveData("bookings");
         for (int i = 1; i < bookings.size(); i++) {
             String[] row = bookings.get(i);
             model.addRow(row);
         }
 
-        // Back button
         JButton backButton = new JButton("Return to Dashboard");
         backButton.addActionListener(e -> {
             frame.dispose();
