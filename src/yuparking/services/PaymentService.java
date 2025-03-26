@@ -10,7 +10,7 @@ public class PaymentService {
         this.db = new Database();
     }
 
-    public void processPayment(int bookingID, double amount, String paymentMethod) {
+    public void processPayment(int bookingID, double amount, String paymentMethod, String description) {
         List<String[]> payments = db.retrieveData("payments");
         int nextPaymentID = payments.size(); // Auto-increment payment ID
 
@@ -19,13 +19,13 @@ public class PaymentService {
                 String.valueOf(bookingID),
                 String.format("%.2f", amount),
                 paymentMethod,
-                "Completed"
+                description
         };
 
         payments.add(newPayment);
         db.confirmUpdate("payments", payments);
 
-        System.out.println("Payment of $" + amount + " processed for booking " + bookingID +
+        System.out.println("Payment of $" + amount + " processed for booking " + bookingID + " as " + description +
                 " using " + paymentMethod + ".");
     }
 
