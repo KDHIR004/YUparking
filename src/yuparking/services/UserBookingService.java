@@ -56,7 +56,7 @@ public class UserBookingService {
         }
         System.out.println("Booking not found or does not belong to your account.");
     }
-
+    
 
     public void modifyUserBooking(User user, int bookingID, String newStartTime, String newEndTime) {
         List<String[]> bookings = db.retrieveData("bookings");
@@ -86,7 +86,7 @@ public class UserBookingService {
         }
         System.out.println("Booking not found or does not belong to your account.");
     }
-
+    
     public void createUserBooking(User user, int spaceID, String startTime, String endTime) {
         if (!user.isVerified()) {
             System.out.println("User " + user.getEmail() + " is not verified. Cannot create booking.");
@@ -100,10 +100,10 @@ public class UserBookingService {
             return;
         }
 
-
+    
         List<String[]> bookings = db.retrieveData("bookings");
         int nextBookingID = bookings.size();
-
+    
         String[] bookingRow = new String[]{
                 String.valueOf(nextBookingID),
                 String.valueOf(user.getUserID()),
@@ -112,12 +112,18 @@ public class UserBookingService {
                 endTime,
                 "Booked"
         };
-
+    
         bookings.add(bookingRow);
         db.confirmUpdate("bookings", bookings);
 
         long hours = Duration.between(LocalDateTime.parse(startTime), LocalDateTime.parse(endTime)).toHours();
         double fee = bookingService.calculateFeeForBooking(user, (int) hours);
+
+        double deposit = bookingService.calculateFeeForBooking(user, 1);
+        PaymentService paymentService = new PaymentService();
+        paymentService.processPayment(nextBookingID, deposit, "Deposit", "Booking Deposit");
+        paymentService.processPayment(nextBookingID, deposit, "Deposit", "Booking Deposit");
+
 
 
         System.out.println("Booking created for user: " + user.getEmail() +
@@ -126,5 +132,60 @@ public class UserBookingService {
                 " | Duration: " + hours + " hours" +
                 " | Parking Fee: $" + fee);
     }
+    private User getUserById(int userId) {
+        LoginService loginService = new LoginService();  // fresh load of users
+        List<User> allUsers = loginService.getAllUsers();
+        for (User user : allUsers) {
+            if (user.getUserID() == userId) {
+                return user;
+            }
+        }
+        System.out.println("User not found for userId: " + userId);
+        return null;
+    }
+
+
+    public void completeBooking(int bookingID) {
+        List<String[]> bookings = db.retrieveData("bookings");
+        boolean bookingFound = false;
+
+        for (String[] row : bookings) {
+            int currentBookingID = Integer.parseInt(row[0]);
+            if (currentBookingID == bookingID && row[5].equalsIgnoreCase("Booked")) {
+                bookingFound = true;
+
+                LocalDateTime startTime = LocalDateTime.parse(row[3]);
+                LocalDateTime now = LocalDateTime.now();
+
+                long hours = Duration.between(startTime, now).toHours();
+                if (hours < 1) {
+                    // No-show condition, deposit not refunded
+                    row[5] = "No-Show";
+                    System.out.println("Booking " + bookingID + " marked as No-Show. Deposit forfeited.");
+                } else {
+                    // Proper completion
+                    row[5] = "Completed";
+                    int userId = Integer.parseInt(row[1]);
+                    User user = getUserById(userId);
+                    double totalFee = bookingService.calculateFeeForBooking(user, (int) hours);
+                    double deposit = bookingService.calculateFeeForBooking(user, 1);
+
+                    double finalAmountDue = totalFee - deposit; // Deposit already taken
+                    PaymentService paymentService = new PaymentService();
+                    paymentService.processPayment(bookingID, finalAmountDue, "Credit", "Remaining parking fee after deposit");
+
+                    System.out.println("Booking " + bookingID + " completed. Remaining amount $" + finalAmountDue + " charged.");
+                }
+
+                db.confirmUpdate("bookings", bookings);
+                break;
+            }
+        }
+
+        if (!bookingFound) {
+            System.out.println("Booking not found or already completed/no-show.");
+        }
+    }
+
 
 }
