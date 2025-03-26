@@ -35,32 +35,26 @@ public class M_ModifyBookingGUI {
         panel.setLayout(new GridLayout(7, 2, 5, 5));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Booking ID input
         panel.add(new JLabel("Booking ID:"));
         bookingIdField = new JTextField();
         panel.add(bookingIdField);
 
-        // New date input
         panel.add(new JLabel("New Date (yyyy-MM-dd):"));
         newDateField = new JTextField();
         panel.add(newDateField);
 
-        // New start time input
         panel.add(new JLabel("Start Time (HH:mm):"));
         newStartTimeField = new JTextField();
         panel.add(newStartTimeField);
 
-        // New end time input
         panel.add(new JLabel("End Time (HH:mm):"));
         newEndTimeField = new JTextField();
         panel.add(newEndTimeField);
 
-        // Modify button
         JButton modifyButton = new JButton("Modify Booking");
         modifyButton.addActionListener(e -> handleModifyBooking());
         panel.add(modifyButton);
 
-        // Back button
         JButton backButton = new JButton("Return to Dashboard");
         backButton.addActionListener(e -> {
             frame.dispose();
@@ -79,18 +73,15 @@ public class M_ModifyBookingGUI {
             String newStartTime = newStartTimeField.getText();
             String newEndTime = newEndTimeField.getText();
 
-            // Validate date format
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             dateFormat.setLenient(false);
             dateFormat.parse(newDate);
 
-            // Validate time format
             SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
             timeFormat.setLenient(false);
             timeFormat.parse(newStartTime);
             timeFormat.parse(newEndTime);
 
-            // Format times to ensure HH:mm format
             String[] startTimeParts = newStartTime.split(":");
             String formattedStartHour = String.format("%02d", Integer.parseInt(startTimeParts[0]));
             String formattedStartMinute = String.format("%02d", Integer.parseInt(startTimeParts[1]));
@@ -101,11 +92,9 @@ public class M_ModifyBookingGUI {
             String formattedEndMinute = String.format("%02d", Integer.parseInt(endTimeParts[1]));
             String formattedEndTime = formattedEndHour + ":" + formattedEndMinute;
 
-            // Combine date and times into ISO format
             String combinedStartDateTime = newDate + "T" + formattedStartTime + ":00";
             String combinedEndDateTime = newDate + "T" + formattedEndTime + ":00";
 
-            // Modify the booking
             managementService.modifyAnyBooking(bookingId, combinedStartDateTime, combinedEndDateTime);
 
             JOptionPane.showMessageDialog(frame,
