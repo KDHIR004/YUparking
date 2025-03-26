@@ -32,7 +32,7 @@ public class AddNewLotGUI {
         panel.setLayout(new GridLayout(5, 2, 5, 5));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Input fields
+
         panel.add(new JLabel("Lot ID:"));
         lotIdField = new JTextField();
         panel.add(lotIdField);
@@ -45,12 +45,10 @@ public class AddNewLotGUI {
         capacityField = new JTextField();
         panel.add(capacityField);
 
-        // Add button
         JButton addButton = new JButton("Add Lot");
         addButton.addActionListener(e -> handleAddLot());
         panel.add(addButton);
 
-        // Back button
         JButton backButton = new JButton("Return to Dashboard");
         backButton.addActionListener(e -> frame.dispose());
         panel.add(backButton);
