@@ -42,40 +42,34 @@ public class CreateBookingGUI {
 
     private void initializeUI() {
         frame = new JFrame("Create Booking");
-        frame.setSize(400, 350);  // Increased height for new fields
+        frame.setSize(400, 350); 
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLocationRelativeTo(null);
 
         panel = new JPanel();
-        panel.setLayout(new GridLayout(7, 2, 5, 5));  // Added row for end time
+        panel.setLayout(new GridLayout(7, 2, 5, 5));  
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Space ID input
         panel.add(new JLabel("Space ID:"));
         spaceIdField = new JTextField();
         panel.add(spaceIdField);
 
-        // Date input
         panel.add(new JLabel("Date (yyyy-MM-dd):"));
         dateField = new JTextField();
         panel.add(dateField);
 
-        // Start Time input
         panel.add(new JLabel("Start Time (HH:mm):"));
         timeField = new JTextField();
         panel.add(timeField);
 
-        // End Time input
         panel.add(new JLabel("End Time (HH:mm):"));
         endTimeField = new JTextField();
         panel.add(endTimeField);
 
-        // Create button
         JButton createButton = new JButton("Create Booking");
         createButton.addActionListener(e -> handleCreateBooking());
         panel.add(createButton);
 
-        // Back button
         JButton backButton = new JButton("Return to Home");
         backButton.addActionListener(e -> {
             frame.dispose();
@@ -138,7 +132,6 @@ public class CreateBookingGUI {
             String startTime = timeField.getText().trim();
             String endTime = endTimeField.getText().trim();
 
-            // Validate date format using LocalDate
             try {
                 LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             } catch (DateTimeParseException e) {
@@ -149,7 +142,6 @@ public class CreateBookingGUI {
                 return;
             }
 
-            // Validate start time format using LocalTime
             LocalTime parsedStartTime;
             try {
                 parsedStartTime = LocalTime.parse(startTime, DateTimeFormatter.ofPattern("HH:mm"));
@@ -161,7 +153,6 @@ public class CreateBookingGUI {
                 return;
             }
 
-            // Validate end time format using LocalTime
             LocalTime parsedEndTime;
             try {
                 parsedEndTime = LocalTime.parse(endTime, DateTimeFormatter.ofPattern("HH:mm"));
@@ -173,7 +164,6 @@ public class CreateBookingGUI {
                 return;
             }
 
-            // Check if end time is after start time
             if (!parsedEndTime.isAfter(parsedStartTime)) {
                 JOptionPane.showMessageDialog(frame,
                         "End time must be after start time.",
@@ -182,7 +172,6 @@ public class CreateBookingGUI {
                 return;
             }
 
-            // Check if user is verified
             if (!currentUser.isVerified()) {
                 JOptionPane.showMessageDialog(frame,
                         "Please verify your email before creating a booking.",
@@ -191,7 +180,6 @@ public class CreateBookingGUI {
                 return;
             }
 
-            // Check if space exists and is available
             if (!isSpaceAvailable(spaceId)) {
                 JOptionPane.showMessageDialog(frame,
                         "Space " + spaceId + " is either not available or does not exist.\n" +
@@ -201,15 +189,12 @@ public class CreateBookingGUI {
                 return;
             }
 
-            // Format times to ensure HH:mm format
             String formattedStartTime = String.format("%02d:%02d", parsedStartTime.getHour(), parsedStartTime.getMinute());
             String formattedEndTime = String.format("%02d:%02d", parsedEndTime.getHour(), parsedEndTime.getMinute());
 
-            // Combine date and times into ISO format
             String startDateTime = date + "T" + formattedStartTime + ":00";
             String endDateTime = date + "T" + formattedEndTime + ":00";
 
-            // Get current bookings to determine next booking ID
             List<String[]> bookings = db.retrieveData("bookings");
             int nextBookingId = 1;  // Start from 1 if no bookings exist
             for (int i = 1; i < bookings.size(); i++) {
@@ -219,7 +204,6 @@ public class CreateBookingGUI {
                 }
             }
 
-            // Create new booking record
             String[] newBooking = {
                     String.valueOf(nextBookingId),
                     String.valueOf(currentUser.getUserID()),
@@ -230,13 +214,9 @@ public class CreateBookingGUI {
             };
             bookings.add(newBooking);
 
-            // Update the database
             db.confirmUpdate("bookings", bookings);
 
-            // Update space status to occupied
             parkingLotService.updateSpaceStatus(spaceId, "occupied");
-
-            // Show confirmation dialog
             JOptionPane.showMessageDialog(frame,
                     String.format("Booking created successfully!\n" +
                                     "Booking ID: %d\n" +
