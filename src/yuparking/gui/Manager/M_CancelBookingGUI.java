@@ -30,17 +30,14 @@ public class M_CancelBookingGUI {
         panel.setLayout(new GridLayout(4, 2, 5, 5));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Booking ID input
         panel.add(new JLabel("Booking ID:"));
         bookingIdField = new JTextField();
         panel.add(bookingIdField);
 
-        // Cancel button
         JButton cancelBookingButton = new JButton("Cancel Booking");
         cancelBookingButton.addActionListener(e -> handleCancelBooking());
         panel.add(cancelBookingButton);
 
-        // Back button
         JButton backButton = new JButton("Return to Dashboard");
         backButton.addActionListener(e -> {
             frame.dispose();
@@ -56,7 +53,6 @@ public class M_CancelBookingGUI {
         try {
             int bookingId = Integer.parseInt(bookingIdField.getText());
 
-            // Cancel the booking
             managementService.cancelAnyBooking(bookingId);
 
             JOptionPane.showMessageDialog(frame,
