@@ -33,18 +33,15 @@ public class EnableDisableLotGUI {
         panel.setLayout(new GridLayout(4, 2, 5, 5));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Lot ID input
         panel.add(new JLabel("Lot ID:"));
         lotIdField = new JTextField();
         panel.add(lotIdField);
 
-        // Action button
         String buttonText = isEnable ? "Enable Lot" : "Disable Lot";
         JButton actionButton = new JButton(buttonText);
         actionButton.addActionListener(e -> handleLotAction());
         panel.add(actionButton);
 
-        // Back button
         JButton backButton = new JButton("Return to Dashboard");
         backButton.addActionListener(e -> frame.dispose());
         panel.add(backButton);
