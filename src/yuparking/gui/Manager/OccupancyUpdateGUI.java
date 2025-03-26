@@ -29,12 +29,10 @@ public class OccupancyUpdateGUI {
         panel.setLayout(new GridLayout(3, 2, 5, 5));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Simulate button
         JButton simulateButton = new JButton("Simulate Sensor Update");
         simulateButton.addActionListener(e -> handleSimulation());
         panel.add(simulateButton);
 
-        // Back button
         JButton backButton = new JButton("Return to Dashboard");
         backButton.addActionListener(e -> frame.dispose());
         panel.add(backButton);
