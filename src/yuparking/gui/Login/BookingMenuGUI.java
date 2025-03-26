@@ -26,7 +26,6 @@ public class BookingMenuGUI {
         panel.setLayout(new GridLayout(7, 1, 5, 5));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Create buttons
         JButton createButton = new JButton("Create Booking");
         JButton modifyButton = new JButton("Modify Booking");
         JButton cancelButton = new JButton("Cancel Booking");
@@ -34,7 +33,6 @@ public class BookingMenuGUI {
         JButton paymentButton = new JButton("Make Payment");
         JButton logoutButton = new JButton("Logout");
 
-        // Add action listeners
         createButton.addActionListener(e -> {
             frame.dispose();
             new CreateBookingGUI(currentUser);
@@ -65,7 +63,6 @@ public class BookingMenuGUI {
             new LoginGUI();
         });
 
-        // Add buttons to panel
         panel.add(createButton);
         panel.add(modifyButton);
         panel.add(cancelButton);
