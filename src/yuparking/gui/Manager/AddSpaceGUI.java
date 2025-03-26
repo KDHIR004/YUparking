@@ -35,22 +35,18 @@ public class AddSpaceGUI {
         panel.setLayout(new GridLayout(4, 2, 5, 5));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Lot ID input
         panel.add(new JLabel("Lot ID:"));
         lotIdField = new JTextField();
         panel.add(lotIdField);
 
-        // Number of spaces input
         panel.add(new JLabel("Number of Spaces:"));
         numberOfSpacesField = new JTextField();
         panel.add(numberOfSpacesField);
 
-        // Add spaces button
         JButton addButton = new JButton("Add Spaces");
         addButton.addActionListener(e -> handleAddSpaces());
         panel.add(addButton);
 
-        // Back button
         JButton backButton = new JButton("Return to Dashboard");
         backButton.addActionListener(e -> {
             frame.dispose();
@@ -86,7 +82,6 @@ public class AddSpaceGUI {
                 return;
             }
 
-            // Add spaces
             parkingLotService.addSpace(lotId, numberOfSpaces);
             JOptionPane.showMessageDialog(frame,
                     numberOfSpaces + " space(s) added successfully to lot " + lotId,
