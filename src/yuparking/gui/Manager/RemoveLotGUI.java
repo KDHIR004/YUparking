@@ -30,17 +30,14 @@ public class RemoveLotGUI {
         panel.setLayout(new GridLayout(4, 2, 5, 5));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Lot ID input
         panel.add(new JLabel("Lot ID:"));
         lotIdField = new JTextField();
         panel.add(lotIdField);
 
-        // Remove button
         JButton removeButton = new JButton("Remove Lot");
         removeButton.addActionListener(e -> handleRemoveLot());
         panel.add(removeButton);
 
-        // Back button
         JButton backButton = new JButton("Return to Dashboard");
         backButton.addActionListener(e -> frame.dispose());
         panel.add(backButton);
