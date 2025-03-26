@@ -34,17 +34,14 @@ public class RemoveSpaceGUI {
         panel.setLayout(new GridLayout(4, 2, 5, 5));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Space ID input
         panel.add(new JLabel("Space ID:"));
         spaceIdField = new JTextField();
         panel.add(spaceIdField);
 
-        // Remove button
         JButton removeButton = new JButton("Remove Space");
         removeButton.addActionListener(e -> handleRemoveSpace());
         panel.add(removeButton);
 
-        // Back button
         JButton backButton = new JButton("Return to Dashboard");
         backButton.addActionListener(e -> {
             frame.dispose();
@@ -60,7 +57,6 @@ public class RemoveSpaceGUI {
         try {
             int spaceId = Integer.parseInt(spaceIdField.getText());
 
-            // Check if space exists
             List<String[]> spaces = db.retrieveData("parkingspaces");
             boolean spaceExists = false;
             for (int i = 1; i < spaces.size(); i++) {
@@ -79,7 +75,6 @@ public class RemoveSpaceGUI {
                 return;
             }
 
-            // Remove space
             parkingLotService.removeSpace(spaceId);
             JOptionPane.showMessageDialog(frame,
                     "Space " + spaceId + " removed successfully!",
