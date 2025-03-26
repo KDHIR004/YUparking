@@ -52,31 +52,31 @@ public class RemoveLotGUI {
     private void handleRemoveLot() {
         try {
             int lotId = Integer.parseInt(lotIdField.getText());
-            
+
             parkingLotService.removeParkingLot(lotId);
-            
+
             int choice = JOptionPane.showOptionDialog(frame,
-                "Parking lot removed successfully!",
-                "Success",
-                JOptionPane.DEFAULT_OPTION,
-                JOptionPane.INFORMATION_MESSAGE,
-                null,
-                new String[]{"Return to Home"},
-                "Return to Home");
-            
+                    "Parking lot removed successfully!",
+                    "Success",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.INFORMATION_MESSAGE,
+                    null,
+                    new String[]{"Return to Home"},
+                    "Return to Home");
+
             if (choice == 0) {
                 frame.dispose();
             }
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(frame,
-                "Please enter a valid Lot ID (number)",
-                "Invalid Input",
-                JOptionPane.ERROR_MESSAGE);
+                    "Please enter a valid Lot ID (number)",
+                    "Invalid Input",
+                    JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(frame,
-                "Error removing parking lot: " + e.getMessage(),
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
+                    "Error removing parking lot: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 } 

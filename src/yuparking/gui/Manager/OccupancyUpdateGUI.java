@@ -46,24 +46,24 @@ public class OccupancyUpdateGUI {
     private void handleSimulation() {
         try {
             sensorService.simulateOccupancyUpdate();
-            
+
             int choice = JOptionPane.showOptionDialog(frame,
-                "Occupancy statuses updated from simulated sensors.",
-                "Simulation Success",
-                JOptionPane.DEFAULT_OPTION,
-                JOptionPane.INFORMATION_MESSAGE,
-                null,
-                new String[]{"Return to Home"},
-                "Return to Home");
-            
+                    "Occupancy statuses updated from simulated sensors.",
+                    "Simulation Success",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.INFORMATION_MESSAGE,
+                    null,
+                    new String[]{"Return to Home"},
+                    "Return to Home");
+
             if (choice == 0) {
                 frame.dispose();
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(frame,
-                "Error simulating occupancy update: " + e.getMessage(),
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
+                    "Error simulating occupancy update: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 } 

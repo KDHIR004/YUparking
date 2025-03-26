@@ -66,29 +66,29 @@ public class AddNewLotGUI {
             int capacity = Integer.parseInt(capacityField.getText());
 
             parkingLotService.addNewParkingLot(lotId, location, capacity);
-            
+
             int choice = JOptionPane.showOptionDialog(frame,
-                "New parking lot added successfully!",
-                "Success",
-                JOptionPane.DEFAULT_OPTION,
-                JOptionPane.INFORMATION_MESSAGE,
-                null,
-                new String[]{"Return to Home"},
-                "Return to Home");
-            
+                    "New parking lot added successfully!",
+                    "Success",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.INFORMATION_MESSAGE,
+                    null,
+                    new String[]{"Return to Home"},
+                    "Return to Home");
+
             if (choice == 0) {
                 frame.dispose();
             }
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(frame,
-                "Please enter valid numbers for Lot ID and Capacity",
-                "Invalid Input",
-                JOptionPane.ERROR_MESSAGE);
+                    "Please enter valid numbers for Lot ID and Capacity",
+                    "Invalid Input",
+                    JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(frame,
-                "Error adding parking lot: " + e.getMessage(),
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
+                    "Error adding parking lot: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 } 

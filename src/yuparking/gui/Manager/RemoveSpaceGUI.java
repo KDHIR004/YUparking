@@ -73,23 +73,23 @@ public class RemoveSpaceGUI {
 
             if (!spaceExists) {
                 JOptionPane.showMessageDialog(frame,
-                    "Space ID " + spaceId + " not found.",
-                    "Space Not Found",
-                    JOptionPane.ERROR_MESSAGE);
+                        "Space ID " + spaceId + " not found.",
+                        "Space Not Found",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             // Remove space
             parkingLotService.removeSpace(spaceId);
-            JOptionPane.showMessageDialog(frame, 
-                "Space " + spaceId + " removed successfully!", 
-                "Success", 
-                JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(frame,
+                    "Space " + spaceId + " removed successfully!",
+                    "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(frame,
-                "Please enter a valid Space ID (number)",
-                "Invalid Input",
-                JOptionPane.ERROR_MESSAGE);
+                    "Please enter a valid Space ID (number)",
+                    "Invalid Input",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 } 

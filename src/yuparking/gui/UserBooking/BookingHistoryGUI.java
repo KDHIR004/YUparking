@@ -54,7 +54,7 @@ public class BookingHistoryGUI {
         // Add data to table
         List<String[]> bookings = db.retrieveData("bookings");
         List<String[]> payments = db.retrieveData("payments");
-        
+
         for (int i = 1; i < bookings.size(); i++) {
             String[] booking = bookings.get(i);
             // Only show bookings for current user
@@ -65,7 +65,7 @@ public class BookingHistoryGUI {
                     String endTime = booking[4];    // End time is in column 4
                     int hours = calculateHours(startTime, endTime);
                     double fee = bookingService.calculateFeeForBooking(currentUser, hours);
-                    
+
                     // Get payment status
                     String paymentStatus = "Not Paid";
                     for (int j = 1; j < payments.size(); j++) {
@@ -75,20 +75,20 @@ public class BookingHistoryGUI {
                             break;
                         }
                     }
-                    
+
                     // Format the row data
                     Object[] rowData = {
-                        booking[0],                    // Booking ID
-                        booking[2],                    // Space ID
-                        formatDateTime(startTime),     // Start Time
-                        formatDateTime(endTime),       // End Time
-                        hours,                         // Duration
-                        String.format("$%.2f", fee),   // Fee
-                        booking[5],                    // Status
-                        paymentStatus,                 // Payment Status
-                        paymentStatus.equals("Not Paid") ? "Pay Now" : ""  // Action
+                            booking[0],                    // Booking ID
+                            booking[2],                    // Space ID
+                            formatDateTime(startTime),     // Start Time
+                            formatDateTime(endTime),       // End Time
+                            hours,                         // Duration
+                            String.format("$%.2f", fee),   // Fee
+                            booking[5],                    // Status
+                            paymentStatus,                 // Payment Status
+                            paymentStatus.equals("Not Paid") ? "Pay Now" : ""  // Action
                     };
-                    
+
                     model.addRow(rowData);
                 } catch (Exception e) {
                     System.out.println("Error processing booking " + booking[0] + ": " + e.getMessage());

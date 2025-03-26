@@ -62,7 +62,7 @@ public class CancelBookingGUI {
     private void handleCancelBooking() {
         try {
             int bookingId = Integer.parseInt(bookingIdField.getText());
-            
+
             // Check if booking exists and belongs to user
             List<String[]> bookings = db.retrieveData("bookings");
             boolean bookingFound = false;
@@ -70,7 +70,7 @@ public class CancelBookingGUI {
             boolean isAlreadyCancelled = false;
             int spaceId = -1;
             int bookingIndex = -1;
-            
+
             for (int i = 1; i < bookings.size(); i++) {
                 String[] row = bookings.get(i);
                 if (row[0].equals(String.valueOf(bookingId))) {
@@ -83,61 +83,61 @@ public class CancelBookingGUI {
                     break;
                 }
             }
-            
+
             if (!bookingFound) {
                 JOptionPane.showMessageDialog(frame,
-                    "Booking not found. Please check the Booking ID.",
-                    "Invalid Booking",
-                    JOptionPane.ERROR_MESSAGE);
+                        "Booking not found. Please check the Booking ID.",
+                        "Invalid Booking",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            
+
             if (!belongsToUser) {
                 JOptionPane.showMessageDialog(frame,
-                    "This booking does not belong to your account.",
-                    "Unauthorized",
-                    JOptionPane.ERROR_MESSAGE);
+                        "This booking does not belong to your account.",
+                        "Unauthorized",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            
+
             if (isAlreadyCancelled) {
                 JOptionPane.showMessageDialog(frame,
-                    "This booking is already cancelled.",
-                    "Already Cancelled",
-                    JOptionPane.ERROR_MESSAGE);
+                        "This booking is already cancelled.",
+                        "Already Cancelled",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            
+
             // Update booking status to Cancelled
             String[] bookingToUpdate = bookings.get(bookingIndex);
             bookingToUpdate[5] = "Cancelled";
             bookings.set(bookingIndex, bookingToUpdate);
-            
+
             // Update the database
             db.confirmUpdate("bookings", bookings);
-            
+
             // Update space status to vacant
             if (spaceId != -1) {
                 parkingLotService.updateSpaceStatus(spaceId, "vacant");
             }
-            
-            JOptionPane.showMessageDialog(frame, 
-                "Booking cancelled successfully!", 
-                "Success", 
-                JOptionPane.INFORMATION_MESSAGE);
-            
+
+            JOptionPane.showMessageDialog(frame,
+                    "Booking cancelled successfully!",
+                    "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
+
             frame.dispose();
             new BookingMenuGUI(currentUser);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(frame,
-                "Please enter a valid Booking ID (number)",
-                "Invalid Input",
-                JOptionPane.ERROR_MESSAGE);
+                    "Please enter a valid Booking ID (number)",
+                    "Invalid Input",
+                    JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(frame,
-                "Error cancelling booking: " + e.getMessage(),
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
+                    "Error cancelling booking: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 }

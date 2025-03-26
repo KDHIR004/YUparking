@@ -56,46 +56,46 @@ public class EnableDisableLotGUI {
     private void handleLotAction() {
         try {
             int lotId = Integer.parseInt(lotIdField.getText());
-            
+
             if (isEnable) {
                 parkingLotService.enableLot(lotId);
                 int choice = JOptionPane.showOptionDialog(frame,
-                    "Parking lot enabled successfully!",
-                    "Success",
-                    JOptionPane.DEFAULT_OPTION,
-                    JOptionPane.INFORMATION_MESSAGE,
-                    null,
-                    new String[]{"Return to Home"},
-                    "Return to Home");
-                
+                        "Parking lot enabled successfully!",
+                        "Success",
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.INFORMATION_MESSAGE,
+                        null,
+                        new String[]{"Return to Home"},
+                        "Return to Home");
+
                 if (choice == 0) {
                     frame.dispose();
                 }
             } else {
                 parkingLotService.disableLot(lotId);
                 int choice = JOptionPane.showOptionDialog(frame,
-                    "Parking lot disabled successfully!",
-                    "Success",
-                    JOptionPane.DEFAULT_OPTION,
-                    JOptionPane.INFORMATION_MESSAGE,
-                    null,
-                    new String[]{"Return to Home"},
-                    "Return to Home");
-                
+                        "Parking lot disabled successfully!",
+                        "Success",
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.INFORMATION_MESSAGE,
+                        null,
+                        new String[]{"Return to Home"},
+                        "Return to Home");
+
                 if (choice == 0) {
                     frame.dispose();
                 }
             }
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(frame,
-                "Please enter a valid Lot ID (number)",
-                "Invalid Input",
-                JOptionPane.ERROR_MESSAGE);
+                    "Please enter a valid Lot ID (number)",
+                    "Invalid Input",
+                    JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(frame,
-                "Error " + (isEnable ? "enabling" : "disabling") + " parking lot: " + e.getMessage(),
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
+                    "Error " + (isEnable ? "enabling" : "disabling") + " parking lot: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 } 

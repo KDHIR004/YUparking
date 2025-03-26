@@ -80,23 +80,23 @@ public class AddSpaceGUI {
 
             if (!lotExistsAndActive) {
                 JOptionPane.showMessageDialog(frame,
-                    "Lot ID " + lotId + " either does not exist or is not active.",
-                    "Invalid Lot",
-                    JOptionPane.ERROR_MESSAGE);
+                        "Lot ID " + lotId + " either does not exist or is not active.",
+                        "Invalid Lot",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             // Add spaces
             parkingLotService.addSpace(lotId, numberOfSpaces);
-            JOptionPane.showMessageDialog(frame, 
-                numberOfSpaces + " space(s) added successfully to lot " + lotId, 
-                "Success", 
-                JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(frame,
+                    numberOfSpaces + " space(s) added successfully to lot " + lotId,
+                    "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(frame,
-                "Please enter valid numbers for Lot ID and Number of Spaces",
-                "Invalid Input",
-                JOptionPane.ERROR_MESSAGE);
+                    "Please enter valid numbers for Lot ID and Number of Spaces",
+                    "Invalid Input",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 } 

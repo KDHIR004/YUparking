@@ -109,27 +109,27 @@ public class M_ModifyBookingGUI {
             managementService.modifyAnyBooking(bookingId, combinedStartDateTime, combinedEndDateTime);
 
             JOptionPane.showMessageDialog(frame,
-                "Booking modified successfully!",
-                "Success",
-                JOptionPane.INFORMATION_MESSAGE);
+                    "Booking modified successfully!",
+                    "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
 
             frame.dispose();
             new ManagerDashboardGUI(currentUser);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(frame,
-                "Please enter a valid Booking ID (number)",
-                "Invalid Input",
-                JOptionPane.ERROR_MESSAGE);
+                    "Please enter a valid Booking ID (number)",
+                    "Invalid Input",
+                    JOptionPane.ERROR_MESSAGE);
         } catch (java.text.ParseException e) {
             JOptionPane.showMessageDialog(frame,
-                "Invalid date or time format. Please use yyyy-MM-dd for date and HH:mm for time.",
-                "Invalid Format",
-                JOptionPane.ERROR_MESSAGE);
+                    "Invalid date or time format. Please use yyyy-MM-dd for date and HH:mm for time.",
+                    "Invalid Format",
+                    JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(frame,
-                "Error modifying booking: " + e.getMessage(),
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
+                    "Error modifying booking: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 }

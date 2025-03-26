@@ -124,7 +124,7 @@ public class ParkingLotService {
     public void removeParkingLot(int lotID) {
         List<String[]> lots = db.retrieveData("parkinglots");
         boolean found = false;
-    
+
         for (int i = 1; i < lots.size(); i++) {
             String[] row = lots.get(i);
             if (Integer.parseInt(row[0]) == lotID) {
@@ -133,7 +133,7 @@ public class ParkingLotService {
                 break;
             }
         }
-    
+
         if (found) {
             db.confirmUpdate("parkinglots", lots);
             System.out.println("Parking lot " + lotID + " removed.");
@@ -141,7 +141,7 @@ public class ParkingLotService {
             System.out.println("Lot not found.");
         }
     }
-    
+
 
     //Update space occupancy status manually (occupied, vacant, maintenance)
     public void updateSpaceStatus(int spaceID, String newStatus) {

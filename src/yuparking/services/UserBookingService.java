@@ -56,7 +56,7 @@ public class UserBookingService {
         }
         System.out.println("Booking not found or does not belong to your account.");
     }
-    
+
 
     public void modifyUserBooking(User user, int bookingID, String newStartTime, String newEndTime) {
         List<String[]> bookings = db.retrieveData("bookings");
@@ -86,7 +86,7 @@ public class UserBookingService {
         }
         System.out.println("Booking not found or does not belong to your account.");
     }
-    
+
     public void createUserBooking(User user, int spaceID, String startTime, String endTime) {
         if (!user.isVerified()) {
             System.out.println("User " + user.getEmail() + " is not verified. Cannot create booking.");
@@ -100,10 +100,10 @@ public class UserBookingService {
             return;
         }
 
-    
+
         List<String[]> bookings = db.retrieveData("bookings");
         int nextBookingID = bookings.size();
-    
+
         String[] bookingRow = new String[]{
                 String.valueOf(nextBookingID),
                 String.valueOf(user.getUserID()),
@@ -112,19 +112,19 @@ public class UserBookingService {
                 endTime,
                 "Booked"
         };
-    
+
         bookings.add(bookingRow);
         db.confirmUpdate("bookings", bookings);
 
         long hours = Duration.between(LocalDateTime.parse(startTime), LocalDateTime.parse(endTime)).toHours();
         double fee = bookingService.calculateFeeForBooking(user, (int) hours);
 
-    
+
         System.out.println("Booking created for user: " + user.getEmail() +
                 " | Booking ID: " + nextBookingID +
                 " | Space ID: " + spaceID +
                 " | Duration: " + hours + " hours" +
                 " | Parking Fee: $" + fee);
     }
-    
+
 }

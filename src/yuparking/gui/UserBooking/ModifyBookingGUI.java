@@ -115,7 +115,7 @@ public class ModifyBookingGUI {
             List<String[]> bookings = db.retrieveData("bookings");
             boolean found = false;
             int bookingIndex = -1;
-            
+
             for (int i = 1; i < bookings.size(); i++) {
                 String[] row = bookings.get(i);
                 if (row[0].equals(String.valueOf(bookingId))) {
@@ -130,9 +130,9 @@ public class ModifyBookingGUI {
 
             if (!found) {
                 JOptionPane.showMessageDialog(frame,
-                    "Booking not found or is not eligible for modification. Only active bookings can be modified.",
-                    "Invalid Booking",
-                    JOptionPane.ERROR_MESSAGE);
+                        "Booking not found or is not eligible for modification. Only active bookings can be modified.",
+                        "Invalid Booking",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -163,31 +163,31 @@ public class ModifyBookingGUI {
 
             // Show confirmation dialog
             JOptionPane.showMessageDialog(frame,
-                String.format("Booking modified successfully!\n" +
-                    "Booking ID: %d\n" +
-                    "New Start Time: %s\n" +
-                    "New End Time: %s",
-                    bookingId, formattedStartTime, formattedEndTime),
-                "Modification Confirmation",
-                JOptionPane.INFORMATION_MESSAGE);
+                    String.format("Booking modified successfully!\n" +
+                                    "Booking ID: %d\n" +
+                                    "New Start Time: %s\n" +
+                                    "New End Time: %s",
+                            bookingId, formattedStartTime, formattedEndTime),
+                    "Modification Confirmation",
+                    JOptionPane.INFORMATION_MESSAGE);
 
             frame.dispose();
             new BookingMenuGUI(currentUser);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(frame,
-                "Please enter a valid Booking ID (number)",
-                "Invalid Input",
-                JOptionPane.ERROR_MESSAGE);
+                    "Please enter a valid Booking ID (number)",
+                    "Invalid Input",
+                    JOptionPane.ERROR_MESSAGE);
         } catch (java.text.ParseException e) {
             JOptionPane.showMessageDialog(frame,
-                "Invalid date or time format. Please use yyyy-MM-dd for date and HH:mm for time.",
-                "Invalid Format",
-                JOptionPane.ERROR_MESSAGE);
+                    "Invalid date or time format. Please use yyyy-MM-dd for date and HH:mm for time.",
+                    "Invalid Format",
+                    JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(frame,
-                "Error modifying booking: " + e.getMessage(),
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
+                    "Error modifying booking: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 }

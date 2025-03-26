@@ -64,7 +64,7 @@ public class ManualSpaceStatusGUI {
         try {
             int spaceId = Integer.parseInt(spaceIdField.getText());
             String newStatus = (String) statusComboBox.getSelectedItem();
-            
+
             // Check if space exists
             List<String[]> spaces = db.retrieveData("parkingspaces");
             boolean spaceFound = false;
@@ -74,39 +74,39 @@ public class ManualSpaceStatusGUI {
                     break;
                 }
             }
-            
+
             if (!spaceFound) {
                 JOptionPane.showMessageDialog(frame,
-                    "Space not found in database.",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
+                        "Space not found in database.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            
+
             parkingLotService.updateSpaceStatus(spaceId, newStatus);
-            
+
             int choice = JOptionPane.showOptionDialog(frame,
-                "Space status updated successfully!",
-                "Success",
-                JOptionPane.DEFAULT_OPTION,
-                JOptionPane.INFORMATION_MESSAGE,
-                null,
-                new String[]{"Return to Home"},
-                "Return to Home");
-            
+                    "Space status updated successfully!",
+                    "Success",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.INFORMATION_MESSAGE,
+                    null,
+                    new String[]{"Return to Home"},
+                    "Return to Home");
+
             if (choice == 0) {
                 frame.dispose();
             }
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(frame,
-                "Please enter a valid Space ID (number)",
-                "Invalid Input",
-                JOptionPane.ERROR_MESSAGE);
+                    "Please enter a valid Space ID (number)",
+                    "Invalid Input",
+                    JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(frame,
-                "Error updating space status: " + e.getMessage(),
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
+                    "Error updating space status: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 } 

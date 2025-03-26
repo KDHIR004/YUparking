@@ -5,8 +5,8 @@ import yuparking.services.payment.*;
 
 public class BookingService {
 
-    // ✅ Calculate fee based on user type and booking duration
-    public double calculateFeeForBooking(User user, int hours) {
+    // Calculate fee based on user type and booking duration
+    public double calculateFeeForBooking(User user, double hours) {
         ParkingFeeStrategy strategy;
         switch (user.getUserType().toLowerCase()) {
             case "student":

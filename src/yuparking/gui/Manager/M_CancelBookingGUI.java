@@ -55,27 +55,27 @@ public class M_CancelBookingGUI {
     private void handleCancelBooking() {
         try {
             int bookingId = Integer.parseInt(bookingIdField.getText());
-            
+
             // Cancel the booking
             managementService.cancelAnyBooking(bookingId);
-            
-            JOptionPane.showMessageDialog(frame, 
-                "Booking cancelled successfully!", 
-                "Success", 
-                JOptionPane.INFORMATION_MESSAGE);
-            
+
+            JOptionPane.showMessageDialog(frame,
+                    "Booking cancelled successfully!",
+                    "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
+
             frame.dispose();
             new ManagerDashboardGUI(currentUser);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(frame,
-                "Please enter a valid Booking ID (number)",
-                "Invalid Input",
-                JOptionPane.ERROR_MESSAGE);
+                    "Please enter a valid Booking ID (number)",
+                    "Invalid Input",
+                    JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(frame,
-                "Error cancelling booking: " + e.getMessage(),
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
+                    "Error cancelling booking: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 }

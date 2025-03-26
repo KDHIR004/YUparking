@@ -18,6 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.io.File;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 public class CreateBookingGUI {
     private JFrame frame;
@@ -25,6 +26,7 @@ public class CreateBookingGUI {
     private JTextField spaceIdField;
     private JTextField dateField;
     private JTextField timeField;
+    private JTextField endTimeField;
     private UserBookingService userBookingService;
     private ParkingLotService parkingLotService;
     private User currentUser;
@@ -40,12 +42,12 @@ public class CreateBookingGUI {
 
     private void initializeUI() {
         frame = new JFrame("Create Booking");
-        frame.setSize(400, 300);
+        frame.setSize(400, 350);  // Increased height for new fields
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLocationRelativeTo(null);
 
         panel = new JPanel();
-        panel.setLayout(new GridLayout(6, 2, 5, 5));
+        panel.setLayout(new GridLayout(7, 2, 5, 5));  // Added row for end time
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         // Space ID input
@@ -58,10 +60,15 @@ public class CreateBookingGUI {
         dateField = new JTextField();
         panel.add(dateField);
 
-        // Time input
-        panel.add(new JLabel("Time (HH:mm):"));
+        // Start Time input
+        panel.add(new JLabel("Start Time (HH:mm):"));
         timeField = new JTextField();
         panel.add(timeField);
+
+        // End Time input
+        panel.add(new JLabel("End Time (HH:mm):"));
+        endTimeField = new JTextField();
+        panel.add(endTimeField);
 
         // Create button
         JButton createButton = new JButton("Create Booking");
@@ -86,9 +93,9 @@ public class CreateBookingGUI {
             if (spaces == null || spaces.isEmpty()) {
                 System.out.println("Debug: No parking spaces data found");
                 JOptionPane.showMessageDialog(frame,
-                    "Error: Could not retrieve parking spaces data.",
-                    "Database Error",
-                    JOptionPane.ERROR_MESSAGE);
+                        "Error: Could not retrieve parking spaces data.",
+                        "Database Error",
+                        JOptionPane.ERROR_MESSAGE);
                 return false;
             }
 
@@ -98,7 +105,7 @@ public class CreateBookingGUI {
             for (int i = 1; i < spaces.size(); i++) {
                 String[] row = spaces.get(i);
                 System.out.println("Debug: Checking row " + i + ": " + String.join(", ", row));
-                
+
                 if (row.length > 0 && row[0].equals(String.valueOf(spaceId))) {
                     System.out.println("Debug: Found matching space ID");
                     // Check if the space exists and is not occupied
@@ -117,9 +124,9 @@ public class CreateBookingGUI {
             System.out.println("Debug: Exception occurred: " + e.getMessage());
             e.printStackTrace();
             JOptionPane.showMessageDialog(frame,
-                "Error checking space availability: " + e.getMessage(),
-                "Database Error",
-                JOptionPane.ERROR_MESSAGE);
+                    "Error checking space availability: " + e.getMessage(),
+                    "Database Error",
+                    JOptionPane.ERROR_MESSAGE);
             return false;
         }
     }
@@ -128,65 +135,83 @@ public class CreateBookingGUI {
         try {
             int spaceId = Integer.parseInt(spaceIdField.getText());
             String date = dateField.getText().trim();
-            String time = timeField.getText().trim();
+            String startTime = timeField.getText().trim();
+            String endTime = endTimeField.getText().trim();
 
             // Validate date format using LocalDate
             try {
                 LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             } catch (DateTimeParseException e) {
                 JOptionPane.showMessageDialog(frame,
-                    "Invalid date format. Please use yyyy-MM-dd (e.g., 2024-03-25)",
-                    "Invalid Date Format",
-                    JOptionPane.ERROR_MESSAGE);
+                        "Invalid date format. Please use yyyy-MM-dd (e.g., 2024-03-25)",
+                        "Invalid Date Format",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            // Validate time format using LocalTime
+            // Validate start time format using LocalTime
+            LocalTime parsedStartTime;
             try {
-                LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm"));
+                parsedStartTime = LocalTime.parse(startTime, DateTimeFormatter.ofPattern("HH:mm"));
             } catch (DateTimeParseException e) {
                 JOptionPane.showMessageDialog(frame,
-                    "Invalid time format. Please use HH:mm (e.g., 14:30)",
-                    "Invalid Time Format",
-                    JOptionPane.ERROR_MESSAGE);
+                        "Invalid start time format. Please use HH:mm (e.g., 14:30)",
+                        "Invalid Time Format",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Validate end time format using LocalTime
+            LocalTime parsedEndTime;
+            try {
+                parsedEndTime = LocalTime.parse(endTime, DateTimeFormatter.ofPattern("HH:mm"));
+            } catch (DateTimeParseException e) {
+                JOptionPane.showMessageDialog(frame,
+                        "Invalid end time format. Please use HH:mm (e.g., 15:30)",
+                        "Invalid Time Format",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Check if end time is after start time
+            if (!parsedEndTime.isAfter(parsedStartTime)) {
+                JOptionPane.showMessageDialog(frame,
+                        "End time must be after start time.",
+                        "Invalid Time Range",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             // Check if user is verified
             if (!currentUser.isVerified()) {
                 JOptionPane.showMessageDialog(frame,
-                    "Please verify your email before creating a booking.",
-                    "Unverified User",
-                    JOptionPane.ERROR_MESSAGE);
+                        "Please verify your email before creating a booking.",
+                        "Unverified User",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             // Check if space exists and is available
             if (!isSpaceAvailable(spaceId)) {
                 JOptionPane.showMessageDialog(frame,
-                    "Space " + spaceId + " is either not available or does not exist.\n" +
-                    "Please check the space ID and try again.",
-                    "Space Unavailable",
-                    JOptionPane.ERROR_MESSAGE);
+                        "Space " + spaceId + " is either not available or does not exist.\n" +
+                                "Please check the space ID and try again.",
+                        "Space Unavailable",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            // Format time to ensure HH:mm format
-            String[] timeParts = time.split(":");
-            String formattedHour = String.format("%02d", Integer.parseInt(timeParts[0]));
-            String formattedMinute = String.format("%02d", Integer.parseInt(timeParts[1]));
-            String formattedTime = formattedHour + ":" + formattedMinute;
+            // Format times to ensure HH:mm format
+            String formattedStartTime = String.format("%02d:%02d", parsedStartTime.getHour(), parsedStartTime.getMinute());
+            String formattedEndTime = String.format("%02d:%02d", parsedEndTime.getHour(), parsedEndTime.getMinute());
 
-            // Combine date and time into ISO format
-            String startDateTime = date + "T" + formattedTime + ":00";
-            
-            // Calculate end time (1 hour after start time)
-            LocalDateTime endTime = LocalDateTime.parse(startDateTime).plusHours(1);
-            String endDateTime = endTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            // Combine date and times into ISO format
+            String startDateTime = date + "T" + formattedStartTime + ":00";
+            String endDateTime = date + "T" + formattedEndTime + ":00";
 
             // Get current bookings to determine next booking ID
             List<String[]> bookings = db.retrieveData("bookings");
-            int nextBookingId = 0;
+            int nextBookingId = 1;  // Start from 1 if no bookings exist
             for (int i = 1; i < bookings.size(); i++) {
                 int currentId = Integer.parseInt(bookings.get(i)[0]);
                 if (currentId >= nextBookingId) {
@@ -196,12 +221,12 @@ public class CreateBookingGUI {
 
             // Create new booking record
             String[] newBooking = {
-                String.valueOf(nextBookingId),
-                String.valueOf(currentUser.getUserID()),
-                String.valueOf(spaceId),
-                startDateTime,
-                endDateTime,
-                "Booked"
+                    String.valueOf(nextBookingId),
+                    String.valueOf(currentUser.getUserID()),
+                    String.valueOf(spaceId),
+                    startDateTime,
+                    endDateTime,
+                    "Booked"
             };
             bookings.add(newBooking);
 
@@ -213,29 +238,30 @@ public class CreateBookingGUI {
 
             // Show confirmation dialog
             JOptionPane.showMessageDialog(frame,
-                String.format("Booking created successfully!\n" +
-                    "Booking ID: %d\n" +
-                    "Space ID: %d\n" +
-                    "Date: %s\n" +
-                    "Time: %s\n\n" +
-                    "Please go to Payment menu to complete your payment.",
-                    nextBookingId, spaceId, date, formattedTime),
-                "Booking Confirmation",
-                JOptionPane.INFORMATION_MESSAGE);
+                    String.format("Booking created successfully!\n" +
+                                    "Booking ID: %d\n" +
+                                    "Space ID: %d\n" +
+                                    "Date: %s\n" +
+                                    "Start Time: %s\n" +
+                                    "End Time: %s\n\n" +
+                                    "Please go to Payment menu to complete your payment.",
+                            nextBookingId, spaceId, date, formattedStartTime, formattedEndTime),
+                    "Booking Confirmation",
+                    JOptionPane.INFORMATION_MESSAGE);
 
             frame.dispose();
             new BookingMenuGUI(currentUser);
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(frame,
-                "Please enter valid numbers for Space ID",
-                "Invalid Input",
-                JOptionPane.ERROR_MESSAGE);
+                    "Please enter valid numbers for Space ID",
+                    "Invalid Input",
+                    JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(frame,
-                "Error creating booking: " + e.getMessage() + "\n" +
-                "Please check if the database files are in the correct location.",
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
+                    "Error creating booking: " + e.getMessage() + "\n" +
+                            "Please check if the database files are in the correct location.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 }
