@@ -38,7 +38,6 @@ public class SuperManagerDashboardGUI {
         JLabel welcomeLabel = new JLabel("Welcome, " + user.getEmail(), SwingConstants.CENTER);
         panel.add(welcomeLabel);
 
-        // Create buttons in specified order
         JButton viewBookingsButton = new JButton("1. View All Bookings");
         JButton modifyBookingButton = new JButton("2. Modify Any Booking");
         JButton cancelBookingButton = new JButton("3. Cancel Any Booking");
@@ -54,7 +53,6 @@ public class SuperManagerDashboardGUI {
         JButton autoAccountButton = new JButton("13. Auto Generate Manager Account");
         JButton logoutButton = new JButton("14. Log out of manager dashboard");
 
-        // Add action listeners
         viewBookingsButton.addActionListener(e -> new AllBookingGUI(user));
         modifyBookingButton.addActionListener(e -> new M_ModifyBookingGUI(user));
         cancelBookingButton.addActionListener(e -> new M_CancelBookingGUI(user));
@@ -73,7 +71,6 @@ public class SuperManagerDashboardGUI {
             new LoginGUI();
         });
 
-        // Add buttons in specified order
         panel.add(viewBookingsButton);
         panel.add(modifyBookingButton);
         panel.add(cancelBookingButton);
