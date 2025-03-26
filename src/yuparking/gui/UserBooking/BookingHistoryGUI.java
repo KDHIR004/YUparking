@@ -40,33 +40,28 @@ public class BookingHistoryGUI {
         panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Create table model with more columns
         String[] columns = {"Booking ID", "Space ID", "Start Time", "End Time", "Duration (hours)", "Fee", "Status", "Payment Status", "Action"};
         DefaultTableModel model = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column == 8; // Only allow editing the Action column
+                return column == 8; 
             }
         };
         JTable table = new JTable(model);
         JScrollPane scrollPane = new JScrollPane(table);
 
-        // Add data to table
         List<String[]> bookings = db.retrieveData("bookings");
         List<String[]> payments = db.retrieveData("payments");
 
         for (int i = 1; i < bookings.size(); i++) {
             String[] booking = bookings.get(i);
-            // Only show bookings for current user
             if (Integer.parseInt(booking[1]) == currentUser.getUserID()) {
                 try {
-                    // Calculate duration and fee
-                    String startTime = booking[3];  // Start time is in column 3
-                    String endTime = booking[4];    // End time is in column 4
+                    String startTime = booking[3]; 
+                    String endTime = booking[4];    
                     int hours = calculateHours(startTime, endTime);
                     double fee = bookingService.calculateFeeForBooking(currentUser, hours);
 
-                    // Get payment status
                     String paymentStatus = "Not Paid";
                     for (int j = 1; j < payments.size(); j++) {
                         String[] payment = payments.get(j);
@@ -76,17 +71,16 @@ public class BookingHistoryGUI {
                         }
                     }
 
-                    // Format the row data
                     Object[] rowData = {
-                            booking[0],                    // Booking ID
-                            booking[2],                    // Space ID
-                            formatDateTime(startTime),     // Start Time
-                            formatDateTime(endTime),       // End Time
-                            hours,                         // Duration
-                            String.format("$%.2f", fee),   // Fee
-                            booking[5],                    // Status
-                            paymentStatus,                 // Payment Status
-                            paymentStatus.equals("Not Paid") ? "Pay Now" : ""  // Action
+                            booking[0],                    
+                            booking[2],                    
+                            formatDateTime(startTime),     
+                            formatDateTime(endTime),       
+                            hours,                         
+                            String.format("$%.2f", fee),   
+                            booking[5],                    
+                            paymentStatus,                 
+                            paymentStatus.equals("Not Paid") ? "Pay Now" : ""  
                     };
 
                     model.addRow(rowData);
@@ -96,7 +90,6 @@ public class BookingHistoryGUI {
             }
         }
 
-        // Add table selection listener for Pay Now button
         table.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 int row = table.getSelectedRow();
@@ -111,7 +104,6 @@ public class BookingHistoryGUI {
             }
         });
 
-        // Back button
         JButton backButton = new JButton("Return to Menu");
         backButton.addActionListener(e -> {
             frame.dispose();
