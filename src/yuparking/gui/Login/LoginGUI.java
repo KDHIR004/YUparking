@@ -89,24 +89,20 @@ public class LoginGUI {
             return;
         }
 
-        // Create a new LoginService instance to refresh the data
         loginService = new LoginService();
         User loggedInUser = loginService.login(email, password);
 
         if (loggedInUser != null) {
-            // Show login success message first
             JOptionPane.showMessageDialog(frame, "Welcome " + loggedInUser.getEmail());
 
-            // Then handle verification if needed
             if (!loggedInUser.isVerified()) {
                 loggedInUser.clickVerificationLink();
                 loginService.updateVerificationInCSV(loggedInUser.getUserID());
-                // Refresh LoginService again after verification
                 loginService = new LoginService();
                 JOptionPane.showMessageDialog(frame, "Verification updated in the system for " + email);
             }
 
-            frame.dispose(); // Close login window
+            frame.dispose(); 
             if (loggedInUser.getUserType().equals("super_manager")) {
                 new SuperManagerDashboardGUI(loggedInUser);
             } else if (loggedInUser.getUserType().equals("manager")) {
@@ -124,7 +120,6 @@ public class LoginGUI {
 
     private void handleSignup() {
         RegistrationGUI registrationGUI = new RegistrationGUI(signupService, db, loginService);
-        // After registration window is closed, refresh LoginService
         registrationGUI.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosed(java.awt.event.WindowEvent windowEvent) {
@@ -168,7 +163,6 @@ class RegistrationGUI extends JFrame {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 5, 5, 5);
 
-        // Email field
         gbc.gridx = 0;
         gbc.gridy = 0;
         panel.add(new JLabel("Email:"), gbc);
@@ -178,7 +172,6 @@ class RegistrationGUI extends JFrame {
         emailField = new JTextField(20);
         panel.add(emailField, gbc);
 
-        // Password field
         gbc.gridx = 0;
         gbc.gridy = 1;
         panel.add(new JLabel("Password:"), gbc);
@@ -188,7 +181,6 @@ class RegistrationGUI extends JFrame {
         passwordField = new JPasswordField(20);
         panel.add(passwordField, gbc);
 
-        // Confirm Password field
         gbc.gridx = 0;
         gbc.gridy = 2;
         panel.add(new JLabel("Confirm Password:"), gbc);
@@ -198,7 +190,6 @@ class RegistrationGUI extends JFrame {
         confirmPasswordField = new JPasswordField(20);
         panel.add(confirmPasswordField, gbc);
 
-        // User Type combo box
         gbc.gridx = 0;
         gbc.gridy = 3;
         panel.add(new JLabel("User Type:"), gbc);
@@ -209,7 +200,6 @@ class RegistrationGUI extends JFrame {
         userTypeCombo = new JComboBox<>(userTypes);
         panel.add(userTypeCombo, gbc);
 
-        // Password requirements label
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.gridwidth = 2;
@@ -221,7 +211,6 @@ class RegistrationGUI extends JFrame {
         requirementsLabel.setForeground(Color.GRAY);
         panel.add(requirementsLabel, gbc);
 
-        // Register button
         gbc.gridx = 0;
         gbc.gridy = 5;
         gbc.gridwidth = 2;
@@ -239,7 +228,6 @@ class RegistrationGUI extends JFrame {
         String confirmPassword = new String(confirmPasswordField.getPassword());
         String userType = (String) userTypeCombo.getSelectedItem();
 
-        // Validate email format
         if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
             JOptionPane.showMessageDialog(this,
                     "Invalid email format.\nPlease enter a valid email address.",
@@ -248,7 +236,6 @@ class RegistrationGUI extends JFrame {
             return;
         }
 
-        // Validate email domain based on user type
         if (!isValidYorkEmail(email, userType)) {
             String domainError = "";
             if (userType.equalsIgnoreCase("student")) {
@@ -265,7 +252,6 @@ class RegistrationGUI extends JFrame {
             return;
         }
 
-        // Check if email exists
         List<String[]> users = db.retrieveData("users");
         for (int i = 1; i < users.size(); i++) {
             if (users.get(i)[1].equalsIgnoreCase(email)) {
@@ -277,7 +263,6 @@ class RegistrationGUI extends JFrame {
             }
         }
 
-        // Validate password length
         if (password.length() < 8) {
             JOptionPane.showMessageDialog(this,
                     "Password must be at least 8 characters long.",
@@ -286,7 +271,6 @@ class RegistrationGUI extends JFrame {
             return;
         }
 
-        // Validate password requirements
         boolean hasUppercase = false;
         boolean hasLowercase = false;
         boolean hasSpecialChar = false;
@@ -327,18 +311,13 @@ class RegistrationGUI extends JFrame {
             return;
         }
 
-        // Attempt registration
         boolean success = signupService.signup(email, password, userType);
         if (success) {
-            // Get the newly created user
             int newUserId = signupService.getNextUserId() - 1;
             User newUser = UserFactory.createUser(newUserId, email, password, userType);
 
-            // Auto-verify all users
             newUser.clickVerificationLink();
             loginService.updateVerificationInCSV(newUserId);
-
-            // Refresh LoginService to get updated data
             loginService = new LoginService();
 
             JOptionPane.showMessageDialog(this,
