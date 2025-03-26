@@ -12,6 +12,7 @@ import yuparking.gui.Manager.OccupancyUpdateGUI;
 import yuparking.gui.Manager.ManualSpaceStatusGUI;
 import yuparking.gui.Manager.AddNewLotGUI;
 import yuparking.gui.Manager.RemoveLotGUI;
+import yuparking.gui.Manager.AutoAccountGUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -50,7 +51,8 @@ public class SuperManagerDashboardGUI {
         JButton manualStatusButton = new JButton("10. Manually Update Space Status");
         JButton addNewLotButton = new JButton("11. Add New Parking Lot");
         JButton removeLotButton = new JButton("12. Remove Parking Lot");
-        JButton logoutButton = new JButton("13. Log out of manager dashboard");
+        JButton autoAccountButton = new JButton("13. Auto Generate Manager Account");
+        JButton logoutButton = new JButton("14. Log out of manager dashboard");
 
         // Add action listeners
         viewBookingsButton.addActionListener(e -> new AllBookingGUI(user));
@@ -65,6 +67,7 @@ public class SuperManagerDashboardGUI {
         manualStatusButton.addActionListener(e -> new ManualSpaceStatusGUI(user));
         addNewLotButton.addActionListener(e -> new AddNewLotGUI(user));
         removeLotButton.addActionListener(e -> new RemoveLotGUI(user));
+        autoAccountButton.addActionListener(e -> new AutoAccountGUI(user));
         logoutButton.addActionListener(e -> {
             frame.dispose();
             new LoginGUI();
@@ -83,6 +86,7 @@ public class SuperManagerDashboardGUI {
         panel.add(manualStatusButton);
         panel.add(addNewLotButton);
         panel.add(removeLotButton);
+        panel.add(autoAccountButton);
         panel.add(logoutButton);
 
         frame.add(panel);

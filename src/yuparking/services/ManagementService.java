@@ -7,6 +7,7 @@ import java.util.List;
 
 public class ManagementService {
     private final Database db;
+    private String lastGeneratedPassword;
 
     public ManagementService() {
         this.db = new Database();
@@ -64,16 +65,17 @@ public class ManagementService {
         }
         System.out.println("Booking not found or already cancelled.");
     }
+
     public void generateManagerAccount() {
         List<String[]> users = db.retrieveData("users");
         int nextId = users.size();
         String generatedUsername = "manager_auto_" + nextId;
-        String generatedPassword = generateStrongPassword();
+        lastGeneratedPassword = generateStrongPassword();
 
         String[] newManager = new String[]{
                 String.valueOf(nextId),
                 generatedUsername + "@yorku.ca",
-                generatedPassword,
+                lastGeneratedPassword,
                 "manager",
                 "true"  // auto-verified
         };
@@ -83,7 +85,16 @@ public class ManagementService {
 
         System.out.println("New manager account generated:");
         System.out.println("Username: " + generatedUsername + "@yorku.ca");
-        System.out.println("Password: " + generatedPassword);
+        System.out.println("Password: " + lastGeneratedPassword);
+    }
+
+    public int getNextUserId() {
+        List<String[]> users = db.retrieveData("users");
+        return users.size();
+    }
+
+    public String getLastGeneratedPassword() {
+        return lastGeneratedPassword;
     }
 
     private String generateStrongPassword() {
