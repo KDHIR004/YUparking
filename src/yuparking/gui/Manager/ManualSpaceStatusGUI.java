@@ -35,23 +35,19 @@ public class ManualSpaceStatusGUI {
         panel.setLayout(new GridLayout(5, 2, 5, 5));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Space ID input
         panel.add(new JLabel("Space ID:"));
         spaceIdField = new JTextField();
         panel.add(spaceIdField);
 
-        // Status selection
         panel.add(new JLabel("New Status:"));
         String[] statuses = {"occupied", "vacant", "maintenance"};
         statusComboBox = new JComboBox<>(statuses);
         panel.add(statusComboBox);
 
-        // Update button
         JButton updateButton = new JButton("Update Status");
         updateButton.addActionListener(e -> handleStatusUpdate());
         panel.add(updateButton);
 
-        // Back button
         JButton backButton = new JButton("Return to Dashboard");
         backButton.addActionListener(e -> frame.dispose());
         panel.add(backButton);
@@ -65,7 +61,6 @@ public class ManualSpaceStatusGUI {
             int spaceId = Integer.parseInt(spaceIdField.getText());
             String newStatus = (String) statusComboBox.getSelectedItem();
 
-            // Check if space exists
             List<String[]> spaces = db.retrieveData("parkingspaces");
             boolean spaceFound = false;
             for (int i = 1; i < spaces.size(); i++) {
