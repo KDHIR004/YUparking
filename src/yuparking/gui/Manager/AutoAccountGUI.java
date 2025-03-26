@@ -12,7 +12,6 @@ public class AutoAccountGUI {
     private ManagementService managementService;
 
     public AutoAccountGUI(User user) {
-        // Check if user is super_manager
         if (!user.getUserType().equals("super_manager")) {
             JOptionPane.showMessageDialog(null,
                     "Access Denied: Only Super Managers can generate new manager accounts.",
@@ -36,7 +35,6 @@ public class AutoAccountGUI {
         mainPanel.setLayout(new BorderLayout(10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        // Title Panel
         JPanel titlePanel = new JPanel();
         titlePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         JLabel titleLabel = new JLabel("Generate New Manager Account");
@@ -44,14 +42,12 @@ public class AutoAccountGUI {
         titlePanel.add(titleLabel);
         mainPanel.add(titlePanel, BorderLayout.NORTH);
 
-        // Content Panel
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 5, 5, 5);
 
-        // Generate Button
         JButton generateButton = new JButton("Generate New Manager Account");
         generateButton.setBackground(new Color(0, 120, 215));
         generateButton.setForeground(Color.WHITE);
@@ -63,7 +59,6 @@ public class AutoAccountGUI {
         gbc.insets = new Insets(0, 0, 20, 0);
         contentPanel.add(generateButton, gbc);
 
-        // Warning Label
         JLabel warningLabel = new JLabel("<html><center>Warning: This will generate a new manager account<br>with auto-generated credentials.<br>Please save the credentials securely.</center></html>");
         warningLabel.setForeground(Color.RED);
         warningLabel.setFont(new Font("Arial", Font.BOLD, 14));
@@ -73,7 +68,6 @@ public class AutoAccountGUI {
         gbc.insets = new Insets(0, 0, 20, 0);
         contentPanel.add(warningLabel, gbc);
 
-        // Result Text Area
         JTextArea resultArea = new JTextArea(20, 40);
         resultArea.setEditable(false);
         resultArea.setLineWrap(true);
@@ -90,7 +84,6 @@ public class AutoAccountGUI {
 
         mainPanel.add(contentPanel, BorderLayout.CENTER);
 
-        // Add action listener to generate button
         generateButton.addActionListener(e -> {
             managementService.generateManagerAccount();
             resultArea.setText("New manager account generated successfully!\n\n" +
