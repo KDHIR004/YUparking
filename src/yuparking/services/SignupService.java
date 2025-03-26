@@ -45,14 +45,20 @@ public class SignupService {
                 System.out.println("Email already exists. Login to Account");
                 return false;
             }
-        }        
-        String[] newUser = new String[]{
+        }
+        String verificationStatus = "false";
+        if (userType.equalsIgnoreCase("visitor")) {
+            verificationStatus = "true";
+        }
+                String[] newUser = new String[]{
             String.valueOf(nextUserId),
             email,
             password,
             userType.toLowerCase(),
-            "false"  // verification
+            verificationStatus
         };
+
+        
         users.add(newUser);
         db.confirmUpdate("users", users);
         System.out.println("Account created for " + email + " as " + userType + ". Verification pending.");
