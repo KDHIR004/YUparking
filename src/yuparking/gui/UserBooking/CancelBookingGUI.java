@@ -37,17 +37,14 @@ public class CancelBookingGUI {
         panel.setLayout(new GridLayout(4, 2, 5, 5));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Booking ID input
         panel.add(new JLabel("Booking ID:"));
         bookingIdField = new JTextField();
         panel.add(bookingIdField);
 
-        // Cancel button
         JButton cancelBookingButton = new JButton("Cancel Booking");
         cancelBookingButton.addActionListener(e -> handleCancelBooking());
         panel.add(cancelBookingButton);
 
-        // Back button
         JButton backButton = new JButton("Return to Home");
         backButton.addActionListener(e -> {
             frame.dispose();
@@ -63,7 +60,6 @@ public class CancelBookingGUI {
         try {
             int bookingId = Integer.parseInt(bookingIdField.getText());
 
-            // Check if booking exists and belongs to user
             List<String[]> bookings = db.retrieveData("bookings");
             boolean bookingFound = false;
             boolean belongsToUser = false;
@@ -79,7 +75,7 @@ public class CancelBookingGUI {
                     int bookingUserId = Integer.parseInt(row[1]);
                     belongsToUser = (bookingUserId == currentUser.getUserID());
                     isAlreadyCancelled = row[5].equalsIgnoreCase("Cancelled");
-                    spaceId = Integer.parseInt(row[2]);  // Get space ID from booking
+                    spaceId = Integer.parseInt(row[2]); 
                     break;
                 }
             }
@@ -108,15 +104,12 @@ public class CancelBookingGUI {
                 return;
             }
 
-            // Update booking status to Cancelled
             String[] bookingToUpdate = bookings.get(bookingIndex);
             bookingToUpdate[5] = "Cancelled";
             bookings.set(bookingIndex, bookingToUpdate);
 
-            // Update the database
             db.confirmUpdate("bookings", bookings);
 
-            // Update space status to vacant
             if (spaceId != -1) {
                 parkingLotService.updateSpaceStatus(spaceId, "vacant");
             }
