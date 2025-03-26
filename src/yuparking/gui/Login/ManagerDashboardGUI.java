@@ -35,7 +35,6 @@ public class ManagerDashboardGUI {
         JLabel welcomeLabel = new JLabel("Welcome, " + user.getEmail(), SwingConstants.CENTER);
         panel.add(welcomeLabel);
 
-        // Create buttons in specified order
         JButton viewBookingsButton = new JButton("1. View All Bookings");
         JButton modifyBookingButton = new JButton("2. Modify Any Booking");
         JButton cancelBookingButton = new JButton("3. Cancel Any Booking");
@@ -48,7 +47,6 @@ public class ManagerDashboardGUI {
         JButton manualStatusButton = new JButton("10. Manually Update Space Status");
         JButton logoutButton = new JButton("11. Log out of manager dashboard");
 
-        // Add action listeners
         viewBookingsButton.addActionListener(e -> new AllBookingGUI(user));
         modifyBookingButton.addActionListener(e -> new M_ModifyBookingGUI(user));
         cancelBookingButton.addActionListener(e -> new M_CancelBookingGUI(user));
@@ -64,7 +62,6 @@ public class ManagerDashboardGUI {
             new LoginGUI();
         });
 
-        // Add buttons in specified order
         panel.add(viewBookingsButton);
         panel.add(modifyBookingButton);
         panel.add(cancelBookingButton);
