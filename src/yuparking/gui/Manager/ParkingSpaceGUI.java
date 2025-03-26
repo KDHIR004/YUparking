@@ -33,21 +33,18 @@ public class ParkingSpaceGUI {
         panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Create table model for parking lots
         String[] lotColumns = {"Lot ID", "Location", "Capacity", "Status"};
         DefaultTableModel lotModel = new DefaultTableModel(lotColumns, 0);
         JTable lotTable = new JTable(lotModel);
         JScrollPane lotScrollPane = new JScrollPane(lotTable);
         lotScrollPane.setBorder(BorderFactory.createTitledBorder("Parking Lots"));
 
-        // Create table model for parking spaces
         String[] spaceColumns = {"Space ID", "Lot ID", "Status"};
         DefaultTableModel spaceModel = new DefaultTableModel(spaceColumns, 0);
         JTable spaceTable = new JTable(spaceModel);
         JScrollPane spaceScrollPane = new JScrollPane(spaceTable);
         spaceScrollPane.setBorder(BorderFactory.createTitledBorder("Parking Spaces"));
 
-        // Add data to tables
         List<String[]> lots = db.retrieveData("parkinglots");
         for (int i = 1; i < lots.size(); i++) {
             String[] row = lots.get(i);
@@ -60,14 +57,12 @@ public class ParkingSpaceGUI {
             spaceModel.addRow(row);
         }
 
-        // Back button
         JButton backButton = new JButton("Return to Dashboard");
         backButton.addActionListener(e -> {
             frame.dispose();
             new ManagerDashboardGUI(currentUser);
         });
 
-        // Create a panel to hold both tables
         JPanel tablesPanel = new JPanel(new GridLayout(2, 1, 10, 10));
         tablesPanel.add(lotScrollPane);
         tablesPanel.add(spaceScrollPane);
