@@ -190,7 +190,10 @@ public class App {
         if (managerUser.getUserType().equals("super_manager")) {
             System.out.println("12. Add New Parking Lot (Super Manager Only)");
             System.out.println("13. Remove Parking Lot (Super Manager Only)");
+            System.out.println("14. Auto-generate new manager account");
+
         }
+
 
         System.out.print("Choose option: ");
         int choice = sc.nextInt();
@@ -285,6 +288,10 @@ public class App {
                     System.out.println("Only Super Managers can remove parking lots.");
                 }
                 break;
+            case 14:
+                if (managerUser.getUserType().equals("super_manager")){
+                    managementService.generateManagerAccount();
+                }
             default:
                 System.out.println("Invalid choice. Try again.");
         }
