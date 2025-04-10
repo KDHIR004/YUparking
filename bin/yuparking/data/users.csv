@@ -7,3 +7,11 @@ id,email,password,usertype,verified
 6,visitor1@gmail.com,visitpass1,visitor,true
 7,student2@my.yorku.ca,Stu123,faculty,false
 8,stu1@my.yorku.ca,stu123,student,true
+9,manager_auto_9@yorku.ca,y95h#8cWi1,manager,true
+10,manager_auto_10@yorku.ca,E6MbhYUF5W,manager,true
+11,manager_auto_11@yorku.ca,$JRauBfjsz,manager,true
+12,manager_auto_12@yorku.ca,ASDH$fp$hK,manager,true
+13,manager_auto_13@yorku.ca,iF70cSFKGG,manager,true
+14,manager_auto_14@yorku.ca,8huSRxJmEL,manager,true
+15,manager_auto_15@yorku.ca,k6nf5CzJea,manager,true
+16,manager_auto_16@yorku.ca,VDZyIGxPS#,manager,true
