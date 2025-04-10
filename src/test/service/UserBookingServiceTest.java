@@ -1,4 +1,4 @@
-package test;
+package test.service;
 
 import yuparking.services.UserBookingService;
 import yuparking.database.Database;
