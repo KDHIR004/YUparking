@@ -24,6 +24,5 @@ public class OccupancySimulator {
         }
 
         db.confirmUpdate("parkingspaces", spaces);
-        System.out.println("Occupancy updated in parkingspaces.csv");
     }
 }

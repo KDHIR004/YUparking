@@ -7,6 +7,7 @@ public class StudentParkingFee implements ParkingFeeStrategy {
 
     @Override
     public double calculateFee(double hours) {
+        if (hours < 0) throw new IllegalArgumentException("Hours must be non-negative.");
         return HOURLY_RATE * hours;
     }
 }

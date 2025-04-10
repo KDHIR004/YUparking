@@ -5,5 +5,4 @@ spaceID,lotID,isOccupied
 104,2,false
 105,2,true
 106,3,true
-S101,LotX,Available
-S101,LotX,Available
+
