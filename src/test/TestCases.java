@@ -1,4 +1,4 @@
-package yuparking.test;
+package test;
 
 import yuparking.models.User;
 import yuparking.factory.UserFactory;

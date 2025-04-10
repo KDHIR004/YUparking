@@ -4,4 +4,4 @@ spaceID,lotID,isOccupied
 103,1,false
 104,2,true
 105,2,true
-106,3,false
+106,3,true
