@@ -6,8 +6,8 @@ import yuparking.models.Booking;
 
 public class BookingTest {
 
-    // Test 1: Constructor - all fields are set correctly
-    @Test
+    // Test 1
+	@Test
     void testConstructorInitialization() {
         Booking booking = new Booking(1, 100, 200, "2025-04-01T08:00", "2025-04-01T10:00", "Booked");
 
@@ -19,7 +19,7 @@ public class BookingTest {
         assertEquals("Booked", booking.getStatus());
     }
 
-    // Test 2: Modify booking updates time correctly
+    // Test 2
     @Test
     void testModifyBooking() {
         Booking booking = new Booking(2, 101, 201, "2025-04-01T09:00", "2025-04-01T11:00", "Booked");
@@ -29,7 +29,7 @@ public class BookingTest {
         assertEquals("2025-04-01T12:00", booking.getEndTime());
     }
 
-    // Test 3: Cancel booking updates status
+    // Test 3
     @Test
     void testCancelBooking() {
         Booking booking = new Booking(3, 102, 202, "2025-04-01T10:00", "2025-04-01T12:00", "Booked");
@@ -62,7 +62,7 @@ public class BookingTest {
         assertEquals("Booked", booking.getStatus());
     }
 
-    // Test 7: Double cancel doesn't break anything
+    // Test 7: 
     @Test
     void testDoubleCancel() {
         Booking booking = new Booking(8, 107, 207, "12:00", "14:00", "Booked");
@@ -72,7 +72,7 @@ public class BookingTest {
         assertEquals("Cancelled", booking.getStatus());
     }
 
-    // Test 8: Modify booking with same values (no effect)
+    // Test 8: 
     @Test
     void testRedundantModify() {
         Booking booking = new Booking(9, 108, 208, "13:00", "15:00", "Booked");
@@ -82,7 +82,7 @@ public class BookingTest {
         assertEquals("15:00", booking.getEndTime());
     }
 
-    // Test 9: Long string for status is accepted (no validation inside class)
+    // Test 9: 
     @Test
     void testCustomStatus() {
         Booking booking = new Booking(10, 109, 209, "14:00", "16:00", "Checked-In-Confirmed-And-Signed-Off");
@@ -90,7 +90,7 @@ public class BookingTest {
         assertEquals("Checked-In-Confirmed-And-Signed-Off", booking.getStatus());
     }
 
-    // Test 10: Booking object handles empty time strings
+    // Test 10: 
     @Test
     void testEmptyTimeStrings() {
         Booking booking = new Booking(11, 110, 210, "", "", "Booked");
