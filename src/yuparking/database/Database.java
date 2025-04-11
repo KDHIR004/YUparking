@@ -28,11 +28,12 @@ public class Database {
         }
 
         File file = new File(filePath);
-        System.out.println("Looking for file at: " + file.getAbsolutePath());  // Debugging path output
+        //System.out.println("Looking for file at: " + file.getAbsolutePath());  // Debugging path output
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = br.readLine()) != null) {
+                if (line.trim().isEmpty()) continue;  // 🛡️ Skip blank lines
                 data.add(line.split(","));
             }
         } catch (FileNotFoundException e) {
@@ -46,13 +47,14 @@ public class Database {
     // Confirm updates to a CSV file
     public void confirmUpdate(String tableName, List<String[]> newData) {
         String filePath = connectionInfo.get(tableName.toLowerCase());
-        if (filePath == null) {
-            System.out.println("Table not found: " + tableName);
-            return;
-        }
+        if (filePath == null) return;
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
             for (String[] row : newData) {
+                if (row == null || row.length == 0 || String.join("", row).trim().isEmpty()) {
+                    continue;
+                }
+
                 bw.write(String.join(",", row));
                 bw.newLine();
             }
@@ -61,6 +63,7 @@ public class Database {
             e.printStackTrace();
         }
     }
+
 
     public List<String> getDataTables() {
         return dataTables;

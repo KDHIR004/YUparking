@@ -4,9 +4,3 @@ id,email,password,usertype,verified
 3,faculty1@yorku.ca,facpass1,faculty,true
 4,staff1@yorku.ca,staffpass1,staff,true
 5,student1@my.yorku.ca,studpass1,student,true
-6,visitor1@gmail.com,visitpass1,visitor,true
-7,student2@my.yorku.ca,Stu123,faculty,false
-8,stu1@my.yorku.ca,stu123,student,true
-9,faculty@yorku.ca,StrongPass123!,faculty,false
-10,visitor123@gmail.com,VisitorPass#123,visitor,true
-11,student@my.yorku.ca,StudentPass!2023,student,false

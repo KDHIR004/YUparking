@@ -14,7 +14,6 @@ public class FacultyTest {
         faculty f = new faculty(1, "prof@yorku.ca", "StrongPass1!");
         assertEquals("Faculty", f.getUserType());
     }
-
     // Test 2: checking if email is same as passed in constructor
     @Test
     void testEmailIsStoredCorrectly() {

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="src" path="randoop-tests"/>
 	<classpathentry kind="src" path="randoop-tutorial-material/binarytree/src/main/java/york/eecs/bt"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="junit-platform-console-standalone-1.10.0.jar"/>

@@ -1,3 +1,4 @@
 lotID,location,capacity,status
+1,North Lot,50,active
 2,South Lot,30,active
 3,East Garage,40,active

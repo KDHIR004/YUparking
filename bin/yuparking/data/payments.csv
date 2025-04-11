@@ -6,3 +6,4 @@ paymentID,bookingID,amount,paymentMethod,status
 5,3,24.00,Credit,Completed
 6,ParkingFee,15.00,credit
 7,ParkingFee,15.00,credit
+8,ParkingFee,15.00,credit

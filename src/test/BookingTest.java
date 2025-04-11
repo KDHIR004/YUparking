@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import yuparking.models.Booking;
 
+
 public class BookingTest {
 
     // Test 1

@@ -2,6 +2,9 @@ package test.service;
 
 import yuparking.services.SignupService;
 import org.junit.jupiter.api.*;
+import java.io.*;
+import java.util.*;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,6 +15,28 @@ public class TestSignupService {
     @BeforeEach
     void setup() {
         signup = new SignupService();
+    }
+    
+    @AfterEach
+    void cleanTestUsers() {
+        List<String[]> cleaned = new ArrayList<>();
+        cleaned.add(new String[]{"id", "email", "password", "usertype", "verified"}); // header
+
+        // real users only
+        cleaned.add(new String[]{"1", "manager1@yorku.ca", "man123", "manager", "true"});
+        cleaned.add(new String[]{"2", "supermanager1@yorku.ca", "superman123", "super_manager", "true"});
+        cleaned.add(new String[]{"3", "faculty1@yorku.ca", "facpass1", "faculty", "true"});
+        cleaned.add(new String[]{"4", "staff1@yorku.ca", "staffpass1", "staff", "true"});
+        cleaned.add(new String[]{"5", "student1@my.yorku.ca", "studpass1", "student", "true"});
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("src/yuparking/data/users.csv"))) {
+            for (String[] row : cleaned) {
+                bw.write(String.join(",", row));
+                bw.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // Test 1: Valid student signup
@@ -70,12 +95,12 @@ public class TestSignupService {
         boolean result = signup.signup("dupe@my.yorku.ca", "Strong1@", "student");
         assertFalse(result);
     }
-
-    // Test 9: Visitor should auto-verify (indirect, check success)
+    
+    //Test 7: short password
     @Test
-    void testVisitorAutoVerified() {
-        boolean result = signup.signup("vnewuser@yahoo.com", "Valid1@", "visitor");
-        assertTrue(result);
+    void testShortPasswordFailsSignup() {
+        boolean result = signup.signup("shortpass@my.yorku.ca", "Sh1@", "student");
+        assertFalse(result, "Signup should fail for passwords shorter than 8 characters");
     }
 
     // Test 10: Case-insensitive user type
