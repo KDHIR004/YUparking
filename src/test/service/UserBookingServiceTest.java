@@ -8,7 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 class UserBookingServiceTest{
@@ -49,7 +48,7 @@ class UserBookingServiceTest{
         String startTime = "2025-04-10T11:00:00";
         String endTime = "2025-04-10T09:00:00";
 
-        
+
         userBookingService.createUserBooking(mockUser, 1, startTime, endTime);
 
        
