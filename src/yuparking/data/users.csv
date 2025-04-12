@@ -4,5 +4,3 @@ id,email,password,usertype,verified
 3,faculty1@yorku.ca,facpass1,faculty,true
 4,staff1@yorku.ca,staffpass1,staff,true
 5,student1@my.yorku.ca,studpass1,student,true
-6,manager_auto_6@yorku.ca,dMwU4WomOz,manager,true
-7,manager_auto_7@yorku.ca,WimKTz4DXy,manager,true

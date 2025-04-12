@@ -3,8 +3,3 @@ paymentID,bookingID,amount,paymentMethod,status
 2,1,20.00,Debit,Completed
 3,2,16.00,Online,Refunded
 4,3,24.00,Credit,Completed
-5,3,15.00,Credit,Completed
-6,3,15.00,Credit,Completed
-7,3,15.00,Credit,Completed
-8,3,15.00,Credit,Completed
-9,3,15.00,Credit,Completed
