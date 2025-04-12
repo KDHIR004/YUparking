@@ -1,0 +1,12 @@
+spaceID,lotID,isOccupied
+101,1,false
+102,1,false
+103,1,false
+104,2,false
+105,2,false
+106,3,false
+107,1,true
+108,1,false
+109,1,true
+110,1,false
+111,1,true
